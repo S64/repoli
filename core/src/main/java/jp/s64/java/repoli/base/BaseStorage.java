@@ -2,6 +2,7 @@ package jp.s64.java.repoli.base;
 
 import com.google.common.primitives.Bytes;
 
+import java.util.Collection;
 import java.util.List;
 
 import jp.s64.java.repoli.core.IDataKey;
@@ -29,6 +30,16 @@ public abstract class BaseStorage implements IStorage {
     }
 
     @Override
+    public void addSerializer(Collection<ISerializer> serializer) {
+        serializers.addSerializer(serializer);
+    }
+
+    @Override
+    public void removeSerializer(Collection<ISerializer> serializer) {
+        serializers.removeSerializer(serializer);
+    }
+
+    @Override
     public void clearSerializer() {
         serializers.clearSerializer();
     }
@@ -43,14 +54,14 @@ public abstract class BaseStorage implements IStorage {
         {
             ret.setBody(
                     serializers.deserializeByClass(
-                            key.getBodyClass(),
-                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[]{}
+                            key.getBodyType(),
+                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[0]
                     )
             );
             ret.setAttachment(
                     serializers.deserializeByClass(
-                            key.getAttachmentClass(),
-                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[]{}
+                            key.getAttachmentType(),
+                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[0]
                     )
             );
             ret.setSavedAtTimeMillis(raw.getSavedAtTimeMillis());
@@ -78,14 +89,14 @@ public abstract class BaseStorage implements IStorage {
         ReturningRepositoryDataContainer<List<Byte>, List<Byte>> save = new ReturningRepositoryDataContainer<>();
         {
             byte[] bodyBytes = serializers.serializeByClass(
-                    key.getBodyClass(),
+                    key.getBodyType(),
                     container.getBody()
             );
             save.setBody(bodyBytes.length > 0 ? Bytes.asList(bodyBytes) : null);
         }
         {
             byte[] attachmentBytes = serializers.serializeByClass(
-                    key.getAttachmentClass(),
+                    key.getAttachmentType(),
                     container.getAttachment()
             );
             save.setAttachment(attachmentBytes.length > 0 ? Bytes.asList(attachmentBytes) : null);

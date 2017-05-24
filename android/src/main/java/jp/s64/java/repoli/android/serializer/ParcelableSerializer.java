@@ -3,8 +3,11 @@ package jp.s64.java.repoli.android.serializer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.common.reflect.TypeToken;
+
+import java.util.Set;
+
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.core.TypeReference;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -16,7 +19,7 @@ public class ParcelableSerializer implements ISerializer {
     private static final String PARCELABLE_CREATOR_FIELD_NAME = "CREATOR";
 
     @Override
-    public <T> T deserialize(TypeReference<T> type, byte[] serialized) {
+    public <T> T deserialize(TypeToken<T> type, byte[] serialized, Set<ISerializer> serializers) {
         if (serialized.length < 1) {
             return null;
         }
@@ -39,7 +42,7 @@ public class ParcelableSerializer implements ISerializer {
     }
 
     @Override
-    public <T> byte[] serialize(TypeReference<T> type, T deserialized) {
+    public <T> byte[] serialize(TypeToken<T> type, Object deserialized, Set<ISerializer> serializers) {
         if (deserialized == null) {
             return new byte[]{};
         }
@@ -54,7 +57,7 @@ public class ParcelableSerializer implements ISerializer {
     }
 
     @Override
-    public boolean canSerialize(TypeReference<?> type) {
+    public boolean canSerialize(TypeToken<?> type) {
         return Parcelable.class.isAssignableFrom(type.getRawType());
     }
 

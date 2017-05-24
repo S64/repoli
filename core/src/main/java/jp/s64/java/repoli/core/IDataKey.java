@@ -1,14 +1,16 @@
 package jp.s64.java.repoli.core;
 
+import com.google.common.reflect.TypeToken;
+
 /**
  * Created by shuma on 2017/05/19.
  */
 
 public interface IDataKey<T, A> {
 
-    TypeReference<T> getBodyClass();
+    TypeToken<T> getBodyType();
 
-    TypeReference<A> getAttachmentClass();
+    TypeToken<A> getAttachmentType();
 
     String getSerialized();
 

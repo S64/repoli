@@ -2,6 +2,9 @@ package jp.s64.java.repoli.android.test.serializer;
 
 import android.support.test.espresso.core.deps.guava.primitives.Bytes;
 
+import com.google.common.collect.Sets;
+import com.google.common.reflect.TypeToken;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +21,7 @@ import jp.s64.java.repoli.base.BaseProvider;
 import jp.s64.java.repoli.base.BaseRepository;
 import jp.s64.java.repoli.core.IRepository;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
-import jp.s64.java.repoli.core.TypeReference;
+import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.DefaultPolicy;
 import jp.s64.java.repoli.preset.ForceRequestPolicy;
@@ -170,9 +173,10 @@ public class ParcelableSerializerTest {
 
             {
                 ret.setBody(Bytes.asList(serializer.serialize(
-                        new TypeReference<ParcelableModel>() {
+                        new TypeToken<ParcelableModel>() {
                         },
-                        original
+                        original,
+                        Sets.<ISerializer>newHashSet(serializer)
                 )));
                 ret.setAttachment(new ArrayList<Byte>());
             }

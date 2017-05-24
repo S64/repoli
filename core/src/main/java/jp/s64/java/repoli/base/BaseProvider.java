@@ -2,6 +2,7 @@ package jp.s64.java.repoli.base;
 
 import com.google.common.primitives.Bytes;
 
+import java.util.Collection;
 import java.util.List;
 
 import jp.s64.java.repoli.core.IDataKey;
@@ -29,6 +30,16 @@ public abstract class BaseProvider implements IProvider {
     }
 
     @Override
+    public void addSerializer(Collection<ISerializer> serializer) {
+        serializers.addSerializer(serializer);
+    }
+
+    @Override
+    public void removeSerializer(Collection<ISerializer> serializer) {
+        serializers.removeSerializer(serializer);
+    }
+
+    @Override
     public void clearSerializer() {
         serializers.clearSerializer();
     }
@@ -44,14 +55,14 @@ public abstract class BaseProvider implements IProvider {
         {
             ret.setBody(
                     serializers.deserializeByClass(
-                            key.getBodyClass(),
-                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[]{}
+                            key.getBodyType(),
+                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[0]
                     )
             );
             ret.setAttachment(
                     serializers.deserializeByClass(
-                            key.getAttachmentClass(),
-                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[]{}
+                            key.getAttachmentType(),
+                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[0]
                     )
             );
         }

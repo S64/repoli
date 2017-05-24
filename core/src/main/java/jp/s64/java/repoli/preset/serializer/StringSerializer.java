@@ -7,33 +7,33 @@ import java.util.Set;
 import jp.s64.java.repoli.core.ISerializer;
 
 /**
- * Created by shuma on 2017/05/22.
+ * Created by shuma on 2017/05/24.
  */
 
-public class VoidSerializer implements ISerializer {
+public class StringSerializer implements ISerializer {
 
-    public static VoidSerializer INSTANCE = newInstance();
+    public static StringSerializer INSTANCE = newInstance();
 
-    public static VoidSerializer newInstance() {
-        return new VoidSerializer();
+    public static StringSerializer newInstance() {
+        return new StringSerializer();
     }
 
-    protected VoidSerializer() {
-
+    protected StringSerializer() {
     }
 
     @Override
     public <T> T deserialize(TypeToken<T> type, byte[] serialized, Set<ISerializer> serializers) {
-        return null;
+        return (T) new String(serialized);
     }
 
     @Override
     public <T> byte[] serialize(TypeToken<T> type, Object deserialized, Set<ISerializer> serializers) {
-        return new byte[0];
+        return ((String) deserialized).getBytes();
     }
 
     @Override
     public boolean canSerialize(TypeToken<?> type) {
-        return Void.class.isAssignableFrom(type.getRawType());
+        return String.class.isAssignableFrom(type.getRawType());
     }
+
 }
