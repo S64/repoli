@@ -8,6 +8,7 @@ import java.util.Set;
 
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.ISerializerUser;
+import jp.s64.java.repoli.core.TypeReference;
 import jp.s64.java.repoli.preset.serializer.VoidSerializer;
 
 /**
@@ -38,41 +39,41 @@ public class SerializerUserHelper implements ISerializerUser {
         serializers.clear();
     }
 
-    public <T> T deserializeByClass(Class<T> clazz, byte[] serialized) {
+    public <T> T deserializeByClass(TypeReference<T> type, byte[] serialized) {
         for (ISerializer serializer : serializers) {
-            if (!serializer.canSerialize(clazz)) {
+            if (!serializer.canSerialize(type)) {
                 continue;
             }
-            return serializer.deserialize(clazz, serialized);
+            return serializer.deserialize(type, serialized);
         }
-        throw SerializerNotFoundException.instantiate(serializers, clazz);
+        throw SerializerNotFoundException.instantiate(serializers, type);
     }
 
-    public <T> byte[] serializeByClass(Class<T> clazz, T deserialized) {
+    public <T> byte[] serializeByClass(TypeReference<T> type, T deserialized) {
         for (ISerializer serializer : serializers) {
-            if (!serializer.canSerialize(clazz)) {
+            if (!serializer.canSerialize(type)) {
                 continue;
             }
-            return serializer.serialize(clazz, deserialized);
+            return serializer.serialize(type, deserialized);
         }
-        throw SerializerNotFoundException.instantiate(serializers, clazz);
+        throw SerializerNotFoundException.instantiate(serializers, type);
     }
 
     public static class SerializerNotFoundException extends RuntimeException {
 
-        public static SerializerNotFoundException instantiate(Collection<ISerializer> serializers, Class<?> clazz) {
+        public static SerializerNotFoundException instantiate(Collection<ISerializer> serializers, TypeReference<?> type) {
             List<String> names = new LinkedList<>();
             for (ISerializer serializer : serializers) {
                 names.add(serializer.getClass().getCanonicalName());
             }
-            return new SerializerNotFoundException(names, clazz);
+            return new SerializerNotFoundException(names, type);
         }
 
-        protected SerializerNotFoundException(Collection<String> serializerNames, Class<?> clazz) {
+        protected SerializerNotFoundException(Collection<String> serializerNames, TypeReference<?> type) {
             super(String.format(
                     "Supported serializer is not found. Current registered serializers: %s. Required class is `%s`.",
                     serializerNames,
-                    clazz.getCanonicalName()
+                    type.getRawType().getCanonicalName()
             ));
         }
 

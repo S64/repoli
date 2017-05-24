@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import jp.s64.java.repoli.core.IDataKey;
+import jp.s64.java.repoli.core.TypeReference;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -71,13 +72,15 @@ public class ParcelableModel implements Parcelable {
     public static IDataKey<ParcelableModel, Void> createKey(final ParcelableModel model) {
         return new IDataKey<ParcelableModel, Void>() {
             @Override
-            public Class<ParcelableModel> getBodyClass() {
-                return ParcelableModel.class;
+            public TypeReference<ParcelableModel> getBodyClass() {
+                return new TypeReference<ParcelableModel>() {
+                };
             }
 
             @Override
-            public Class<Void> getAttachmentClass() {
-                return Void.class;
+            public TypeReference<Void> getAttachmentClass() {
+                return new TypeReference<Void>() {
+                };
             }
 
             @Override

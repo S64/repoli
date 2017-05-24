@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.core.TypeReference;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -15,7 +16,7 @@ public class ParcelableSerializer implements ISerializer {
     private static final String PARCELABLE_CREATOR_FIELD_NAME = "CREATOR";
 
     @Override
-    public <T> T deserialize(Class<T> clazz, byte[] serialized) {
+    public <T> T deserialize(TypeReference<T> type, byte[] serialized) {
         if (serialized.length < 1) {
             return null;
         }
@@ -28,7 +29,7 @@ public class ParcelableSerializer implements ISerializer {
         }
         Parcelable.Creator<T> creator;
         try {
-            creator = (Parcelable.Creator<T>) clazz.getDeclaredField(PARCELABLE_CREATOR_FIELD_NAME).get(null);
+            creator = (Parcelable.Creator<T>) type.getRawType().getDeclaredField(PARCELABLE_CREATOR_FIELD_NAME).get(null);
         } catch (NoSuchFieldException e) {
             throw new ParcelableSerializerException(e);
         } catch (IllegalAccessException e) {
@@ -38,7 +39,7 @@ public class ParcelableSerializer implements ISerializer {
     }
 
     @Override
-    public <T> byte[] serialize(Class<T> clazz, T deserialized) {
+    public <T> byte[] serialize(TypeReference<T> type, T deserialized) {
         if (deserialized == null) {
             return new byte[]{};
         }
@@ -53,8 +54,8 @@ public class ParcelableSerializer implements ISerializer {
     }
 
     @Override
-    public boolean canSerialize(Class<?> clazz) {
-        return Parcelable.class.isAssignableFrom(clazz);
+    public boolean canSerialize(TypeReference<?> type) {
+        return Parcelable.class.isAssignableFrom(type.getRawType());
     }
 
     public static class ParcelableSerializerException extends RuntimeException {

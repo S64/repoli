@@ -6,10 +6,10 @@ package jp.s64.java.repoli.core;
 
 public interface ISerializer {
 
-    <T> T deserialize(Class<T> clazz, byte[] serialized);
+    <T> T deserialize(TypeReference<T> type, byte[] serialized);
 
-    <T> byte[] serialize(Class<T> clazz, T deserialized);
+    <T> byte[] serialize(TypeReference<T> type, T deserialized);
 
-    boolean canSerialize(Class<?> clazz);
+    boolean canSerialize(TypeReference<?> type);
 
 }

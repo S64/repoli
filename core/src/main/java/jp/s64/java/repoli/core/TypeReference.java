@@ -4,9 +4,6 @@ import com.google.common.reflect.TypeToken;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by shuma on 2017/05/24.
@@ -14,18 +11,9 @@ import java.util.List;
 public abstract class TypeReference<T> {
 
     private final Type type;
-    private final List<TypeReference<?>> inner = new ArrayList<>();
 
     protected TypeReference() {
-        {
-            type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        }
-        {
-            TypeToken<?> token = TypeToken.of(getType());
-            for (TypeVariable<?> inner : token.getRawType().getTypeParameters()) {
-
-            }
-        }
+        type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public Type getType() {

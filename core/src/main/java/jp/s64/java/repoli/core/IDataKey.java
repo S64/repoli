@@ -6,9 +6,9 @@ package jp.s64.java.repoli.core;
 
 public interface IDataKey<T, A> {
 
-    Class<T> getBodyClass();
+    TypeReference<T> getBodyClass();
 
-    Class<A> getAttachmentClass();
+    TypeReference<A> getAttachmentClass();
 
     String getSerialized();
 
