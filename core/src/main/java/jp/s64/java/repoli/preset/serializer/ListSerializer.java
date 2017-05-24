@@ -58,7 +58,7 @@ public class ListSerializer implements ISerializer {
                 }
                 in.close();
             } catch (IOException e) {
-                // squash
+                throw new ListSerializerException(e);
             }
         }
 
@@ -109,7 +109,7 @@ public class ListSerializer implements ISerializer {
                 }
                 out.close();
             } catch (IOException e) {
-                // squash
+                throw new ListSerializerException(e);
             }
         }
     }
