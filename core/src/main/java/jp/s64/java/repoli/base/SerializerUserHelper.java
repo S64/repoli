@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.ISerializerUser;
@@ -21,7 +21,7 @@ import jp.s64.java.repoli.preset.serializer.VoidSerializer;
 
 public class SerializerUserHelper implements ISerializerUser {
 
-    private final Set<ISerializer> serializers = new LinkedHashSet<>();
+    private final SortedSet<ISerializer> serializers = new TreeSet<>();
 
     public SerializerUserHelper() {
         addSerializer(Lists.newArrayList(
@@ -56,7 +56,7 @@ public class SerializerUserHelper implements ISerializerUser {
         serializers.clear();
     }
 
-    public Set<ISerializer> getSerializers() {
+    public SortedSet<ISerializer> getSerializers() {
         return serializers;
     }
 

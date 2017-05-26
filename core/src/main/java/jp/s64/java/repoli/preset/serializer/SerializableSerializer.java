@@ -84,6 +84,14 @@ public class SerializableSerializer implements ISerializer {
         return Serializable.class.isAssignableFrom(type.getRawType());
     }
 
+    @Override
+    public int compareTo(ISerializer serializer) {
+        if (ListSerializer.class.isInstance(serializer) || VoidSerializer.class.isInstance(serializer)) {
+            return 1;
+        }
+        return -1;
+    }
+
     public static class SerializableSerializerException extends RuntimeException {
 
         public SerializableSerializerException(Throwable throwable) {

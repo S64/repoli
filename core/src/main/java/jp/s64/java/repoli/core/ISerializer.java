@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by shuma on 2017/05/19.
  */
 
-public interface ISerializer {
+public interface ISerializer extends Comparable<ISerializer> {
 
     <T> T deserialize(TypeToken<T> type, byte[] serialized, Set<ISerializer> serializers);
 

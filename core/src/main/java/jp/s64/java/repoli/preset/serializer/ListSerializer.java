@@ -119,6 +119,14 @@ public class ListSerializer implements ISerializer {
         return List.class.isAssignableFrom(type.getRawType());
     }
 
+    @Override
+    public int compareTo(ISerializer serializer) {
+        if (SerializableSerializer.class.isInstance(serializer)) {
+            return -1;
+        }
+        return 1;
+    }
+
     public static class ListSerializerException extends RuntimeException {
 
         public ListSerializerException(Throwable throwable) {

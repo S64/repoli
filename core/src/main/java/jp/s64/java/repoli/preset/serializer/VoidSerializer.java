@@ -36,4 +36,10 @@ public class VoidSerializer implements ISerializer {
     public boolean canSerialize(TypeToken<?> type) {
         return Void.class.isAssignableFrom(type.getRawType());
     }
+
+    @Override
+    public int compareTo(ISerializer serializer) {
+        return -1;
+    }
+
 }
