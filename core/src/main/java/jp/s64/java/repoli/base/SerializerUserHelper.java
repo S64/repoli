@@ -12,7 +12,7 @@ import java.util.Set;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.ISerializerUser;
 import jp.s64.java.repoli.preset.serializer.ListSerializer;
-import jp.s64.java.repoli.preset.serializer.StringSerializer;
+import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
 import jp.s64.java.repoli.preset.serializer.VoidSerializer;
 
 /**
@@ -26,8 +26,8 @@ public class SerializerUserHelper implements ISerializerUser {
     public SerializerUserHelper() {
         addSerializer(Lists.newArrayList(
                 VoidSerializer.INSTANCE,
-                StringSerializer.INSTANCE,
-                ListSerializer.INSTANCE
+                ListSerializer.INSTANCE,
+                SerializableSerializer.INSTANCE
         ));
     }
 
