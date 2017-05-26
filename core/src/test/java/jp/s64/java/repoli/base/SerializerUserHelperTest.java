@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import jp.s64.java.repoli.base.SerializerUserHelper;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.preset.serializer.ListSerializer;
+import jp.s64.java.repoli.preset.serializer.MapSerializer;
 import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
 import jp.s64.java.repoli.preset.serializer.VoidSerializer;
 
@@ -31,15 +31,18 @@ public class SerializerUserHelperTest {
             helper.addSerializer(Lists.newArrayList(
                     ListSerializer.INSTANCE,
                     SerializableSerializer.INSTANCE,
-                    VoidSerializer.INSTANCE
+                    VoidSerializer.INSTANCE,
+                    MapSerializer.INSTANCE
             ));
         }
-        assertEquals(3, helper.getSerializers().size());
+        assertEquals(4, helper.getSerializers().size());
         List<ISerializer> sorted = Lists.newLinkedList(helper.getSerializers());
         {   // 期待する順序になっていることを確認
-            assertEquals(VoidSerializer.class, sorted.get(0).getClass());
-            assertEquals(ListSerializer.class, sorted.get(1).getClass());
-            assertEquals(SerializableSerializer.class, sorted.get(2).getClass());
+            int i = -1;
+            assertEquals(VoidSerializer.class, sorted.get(++i).getClass());
+            assertEquals(ListSerializer.class, sorted.get(++i).getClass());
+            assertEquals(MapSerializer.class, sorted.get(++i).getClass());
+            assertEquals(SerializableSerializer.class, sorted.get(++i).getClass());
         }
     }
 
