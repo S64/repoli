@@ -1,6 +1,5 @@
 package jp.s64.java.repoli.preset.serializer;
 
-import com.google.common.primitives.Bytes;
 import com.google.common.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
@@ -43,10 +42,10 @@ public class ListSerializer implements ISerializer {
         ByteArrayInputStream in = new ByteArrayInputStream(serialized);
         ObjectInputStream ois = null;
 
-        List<List<Byte>> org = null;
+        List<byte[]> org = null;
         try {
             ois = new ObjectInputStream(in);
-            org = (List<List<Byte>>) ois.readObject();
+            org = (List<byte[]>) ois.readObject();
         } catch (IOException e) {
             throw new ListSerializerException(e);
         } catch (ClassNotFoundException e) {
@@ -66,8 +65,8 @@ public class ListSerializer implements ISerializer {
 
         if (org != null) {
             dest = new ArrayList<>();
-            for (List<Byte> item : org) {
-                Object deserialized = helper.deserializeByClass(innerType, Bytes.toArray(item));
+            for (byte[] item : org) {
+                Object deserialized = helper.deserializeByClass(innerType, item);
                 dest.add(deserialized);
             }
         }
@@ -81,14 +80,14 @@ public class ListSerializer implements ISerializer {
         {
             helper.addSerializer(serializers);
         }
-        List<List<Byte>> dest = new LinkedList<>();
+        List<byte[]> dest = new LinkedList<>();
 
         List<?> list = (List<?>) deserialized;
         TypeToken<?> innerType = type.resolveType(type.getRawType().getTypeParameters()[0]);
 
         for (Object item : list) {
             byte[] serialized = helper.serializeByClass(innerType, item);
-            dest.add(Bytes.asList(serialized));
+            dest.add(serialized);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
