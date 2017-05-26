@@ -1,14 +1,12 @@
 package jp.s64.java.repoli.base;
 
-import com.google.common.primitives.Bytes;
-
 import java.util.Collection;
-import java.util.List;
 
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.IStorage;
+import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
@@ -47,21 +45,21 @@ public abstract class BaseStorage implements IStorage {
     @Override
     public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
-        ReturningRepositoryDataContainer<List<Byte>, List<Byte>> raw;
+        ByteArrayContainer raw;
         {
-            raw = new ReturningRepositoryDataContainer<>(getBySerializedKey(key.getSerialized()));
+            raw = new ByteArrayContainer(getBySerializedKey(key.getSerialized()));
         }
         {
             ret.setBody(
                     serializers.deserializeByClass(
                             key.getBodyType(),
-                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[0]
+                            raw.getBody() != null ? raw.getBody() : new byte[0]
                     )
             );
             ret.setAttachment(
                     serializers.deserializeByClass(
                             key.getAttachmentType(),
-                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[0]
+                            raw.getAttachment() != null ? raw.getAttachment() : new byte[0]
                     )
             );
             ret.setSavedAtTimeMillis(raw.getSavedAtTimeMillis());
@@ -86,20 +84,20 @@ public abstract class BaseStorage implements IStorage {
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
         }
-        ReturningRepositoryDataContainer<List<Byte>, List<Byte>> save = new ReturningRepositoryDataContainer<>();
+        ByteArrayContainer save = new ByteArrayContainer();
         {
             byte[] bodyBytes = serializers.serializeByClass(
                     key.getBodyType(),
                     container.getBody()
             );
-            save.setBody(bodyBytes.length > 0 ? Bytes.asList(bodyBytes) : null);
+            save.setBody(bodyBytes.length > 0 ? bodyBytes : null);
         }
         {
             byte[] attachmentBytes = serializers.serializeByClass(
                     key.getAttachmentType(),
                     container.getAttachment()
             );
-            save.setAttachment(attachmentBytes.length > 0 ? Bytes.asList(attachmentBytes) : null);
+            save.setAttachment(attachmentBytes.length > 0 ? attachmentBytes : null);
         }
         {
             save.setRequestedAtTimeMillis(container.getRequestedAtTimeMillis());
@@ -111,12 +109,12 @@ public abstract class BaseStorage implements IStorage {
         return container;
     }
 
-    public abstract IRepositoryDataContainer<List<Byte>, List<Byte>> getBySerializedKey(String serializedKey);
+    public abstract ByteArrayContainer getBySerializedKey(String serializedKey);
 
     public abstract int removeBySerializedKey(String serializedKey);
 
     public abstract int removeRelativesByRelatedKey(String relatedKey);
 
-    public abstract void saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<List<Byte>, List<Byte>> container);
+    public abstract void saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container);
 
 }

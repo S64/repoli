@@ -1,14 +1,12 @@
 package jp.s64.java.repoli.base;
 
-import com.google.common.primitives.Bytes;
-
 import java.util.Collection;
-import java.util.List;
 
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IProvider;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
@@ -47,22 +45,22 @@ public abstract class BaseProvider implements IProvider {
     @Override
     public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
-        ReturningRepositoryDataContainer<List<Byte>, List<Byte>> raw;
+        ByteArrayContainer raw;
         {
             String serialized = key.getSerialized();
-            raw = new ReturningRepositoryDataContainer<>(requestBySerializedKey(serialized));
+            raw = new ByteArrayContainer(requestBySerializedKey(serialized));
         }
         {
             ret.setBody(
                     serializers.deserializeByClass(
                             key.getBodyType(),
-                            raw.getBody() != null ? Bytes.toArray(raw.getBody()) : new byte[0]
+                            raw.getBody() != null ? raw.getBody() : new byte[0]
                     )
             );
             ret.setAttachment(
                     serializers.deserializeByClass(
                             key.getAttachmentType(),
-                            raw.getAttachment() != null ? Bytes.toArray(raw.getAttachment()) : new byte[0]
+                            raw.getAttachment() != null ? raw.getAttachment() : new byte[0]
                     )
             );
         }
@@ -73,6 +71,6 @@ public abstract class BaseProvider implements IProvider {
         return ret;
     }
 
-    public abstract IRepositoryDataContainer<List<Byte>, List<Byte>> requestBySerializedKey(String serializedKey);
+    public abstract ByteArrayContainer requestBySerializedKey(String serializedKey);
 
 }

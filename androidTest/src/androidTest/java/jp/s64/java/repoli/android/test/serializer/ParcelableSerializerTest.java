@@ -1,7 +1,5 @@
 package jp.s64.java.repoli.android.test.serializer;
 
-import android.support.test.espresso.core.deps.guava.primitives.Bytes;
-
 import com.google.common.collect.Sets;
 import com.google.common.reflect.TypeToken;
 
@@ -9,9 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +18,7 @@ import jp.s64.java.repoli.base.BaseRepository;
 import jp.s64.java.repoli.core.IRepository;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
+import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.preset.DefaultPolicy;
 import jp.s64.java.repoli.preset.ForceRequestPolicy;
 import jp.s64.java.repoli.preset.SimpleOnMemoryStorage;
@@ -163,8 +159,8 @@ public class ParcelableSerializerTest {
         }
 
         @Override
-        public IRepositoryDataContainer<List<Byte>, List<Byte>> requestBySerializedKey(String serializedKey) {
-            ReturningRepositoryDataContainer<List<Byte>, List<Byte>> ret = new ReturningRepositoryDataContainer<>();
+        public ByteArrayContainer requestBySerializedKey(String serializedKey) {
+            ByteArrayContainer ret = new ByteArrayContainer();
 
             ParcelableModel original = registered.get(serializedKey);
             if (original == null) {
@@ -172,13 +168,13 @@ public class ParcelableSerializerTest {
             }
 
             {
-                ret.setBody(Bytes.asList(serializer.serialize(
+                ret.setBody(serializer.serialize(
                         new TypeToken<ParcelableModel>() {
                         },
                         original,
                         Sets.<ISerializer>newHashSet(serializer)
-                )));
-                ret.setAttachment(new ArrayList<Byte>());
+                ));
+                ret.setAttachment(new byte[0]);
             }
             {
                 ret.setRequestedAtTimeMillis(System.currentTimeMillis());

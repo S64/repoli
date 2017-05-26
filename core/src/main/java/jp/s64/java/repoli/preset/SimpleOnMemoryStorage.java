@@ -2,14 +2,12 @@ package jp.s64.java.repoli.preset;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import jp.s64.java.repoli.base.BaseStorage;
-import jp.s64.java.repoli.core.IRepositoryDataContainer;
-import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
+import jp.s64.java.repoli.internal.ByteArrayContainer;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -20,13 +18,13 @@ public class SimpleOnMemoryStorage extends BaseStorage {
     private final Map<String, UUID> byKey = new HashMap<>();
     private final Map<String, Set<UUID>> byRelatedKey = new HashMap<>();
 
-    private final Map<UUID, IRepositoryDataContainer<List<Byte>, List<Byte>>> db = new HashMap<>();
+    private final Map<UUID, ByteArrayContainer> db = new HashMap<>();
 
     @Override
-    public IRepositoryDataContainer<List<Byte>, List<Byte>> getBySerializedKey(String serializedKey) {
+    public ByteArrayContainer getBySerializedKey(String serializedKey) {
         UUID uuid = byKey.get(serializedKey);
-        IRepositoryDataContainer<List<Byte>, List<Byte>> item = uuid != null ? db.get(uuid) : null;
-        return item != null ? new ReturningRepositoryDataContainer<>(item) : new ReturningRepositoryDataContainer<List<Byte>, List<Byte>>();
+        ByteArrayContainer item = uuid != null ? db.get(uuid) : null;
+        return item != null ? new ByteArrayContainer(item) : new ByteArrayContainer();
     }
 
     @Override
@@ -74,7 +72,7 @@ public class SimpleOnMemoryStorage extends BaseStorage {
     }
 
     @Override
-    public void saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<List<Byte>, List<Byte>> container) {
+    public void saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container) {
         UUID oldId, newId;
         {
             newId = UUID.randomUUID();
