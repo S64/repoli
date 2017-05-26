@@ -46,7 +46,7 @@ public abstract class BaseRxStorage implements IRxStorage {
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> getAsync(IDataKey<T, A> key) {
+    public <T, A> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
         return getBySerializedKey(key.getSerialized())
                 .map(new Func1<ByteArrayContainer, IRepositoryDataContainer<T, A>>() {
                     @Override
@@ -68,7 +68,7 @@ public abstract class BaseRxStorage implements IRxStorage {
 
     @Override
     public <T, A> Observable<IRepositoryDataContainer<T, A>> saveAsync(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
-        ReturningRepositoryDataContainer<T, A> container = new ReturningRepositoryDataContainer<>(original);
+        final ReturningRepositoryDataContainer<T, A> container = new ReturningRepositoryDataContainer<>(original);
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
         }

@@ -33,7 +33,7 @@ public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
     }
 
     @Override
-    public Observable<Void> saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container) {
+    public Observable<Void> saveBySerializedKey(final String serializedKey, final String relatedKey, final ByteArrayContainer container) {
         return Observable
                 .<Void>just(null)
                 .doOnNext(new Action1<Object>() {

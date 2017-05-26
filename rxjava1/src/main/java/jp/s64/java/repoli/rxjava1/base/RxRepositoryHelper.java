@@ -17,7 +17,7 @@ import rx.functions.Func1;
 public class RxRepositoryHelper implements IRxRepository {
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage storage, IExpirePolicy policy, IRxProvider provider) {
+    public <T, A> Observable<IRepositoryDataContainer<T, A>> get(final IDataKey<T, A> key, final IRxStorage storage, final IExpirePolicy policy, final IRxProvider provider) {
         return storage.getAsync(key)
                 //.onErrorResumeNext(Observable.empty())
                 .map(new Func1<IRepositoryDataContainer<T, A>, ReturningRepositoryDataContainer<T, A>>() {
@@ -29,7 +29,7 @@ public class RxRepositoryHelper implements IRxRepository {
                 })
                 .flatMap(new Func1<ReturningRepositoryDataContainer<T, A>, Observable<ReturningRepositoryDataContainer<T, A>>>() {
                     @Override
-                    public Observable<ReturningRepositoryDataContainer<T, A>> call(ReturningRepositoryDataContainer<T, A> container) {
+                    public Observable<ReturningRepositoryDataContainer<T, A>> call(final ReturningRepositoryDataContainer<T, A> container) {
                         Observable<Integer> obs;
                         if (policy.shouldExpire(key, container)) {
                             {
@@ -53,7 +53,7 @@ public class RxRepositoryHelper implements IRxRepository {
                 })
                 .flatMap(new Func1<ReturningRepositoryDataContainer<T, A>, Observable<ReturningRepositoryDataContainer<T, A>>>() {
                     @Override
-                    public Observable<ReturningRepositoryDataContainer<T, A>> call(ReturningRepositoryDataContainer<T, A> container) {
+                    public Observable<ReturningRepositoryDataContainer<T, A>> call(final ReturningRepositoryDataContainer<T, A> container) {
                         Observable<Integer> obs;
                         if (policy.shouldExpireWithRelatives(key, container)) {
                             obs = storage.removeRelativesAsync(key);
@@ -69,10 +69,10 @@ public class RxRepositoryHelper implements IRxRepository {
                                 });
                     }
                 })
-                .flatMap(new Func1<ReturningRepositoryDataContainer<T, A>, Observable<ReturningRepositoryDataContainer<T, A>>>() {
+                .flatMap(new Func1<IRepositoryDataContainer<T, A>, Observable<IRepositoryDataContainer<T, A>>>() {
 
                     @Override
-                    public Observable<ReturningRepositoryDataContainer<T, A>> call(ReturningRepositoryDataContainer<T, A> container) {
+                    public Observable<IRepositoryDataContainer<T, A>> call(IRepositoryDataContainer<T, A> container) {
                         Observable<IRepositoryDataContainer<T, A>> obs;
                         if (policy.shouldRequest(key, container)) {
                             obs = provider.request(key);
@@ -81,7 +81,7 @@ public class RxRepositoryHelper implements IRxRepository {
                         }
                         return obs
                                 //.onErrorResumeNext(Observable.empty())
-                                .map(new Func1<IRepositoryDataContainer<T, A>, ReturningRepositoryDataContainer<T, A>>() {
+                                .map(new Func1<IRepositoryDataContainer<T, A>, IRepositoryDataContainer<T, A>>() {
                                     @Override
                                     public ReturningRepositoryDataContainer<T, A> call(IRepositoryDataContainer<T, A> container) {
                                         return new ReturningRepositoryDataContainer<>(container);
@@ -90,9 +90,9 @@ public class RxRepositoryHelper implements IRxRepository {
                     }
 
                 })
-                .flatMap(new Func1<ReturningRepositoryDataContainer<T, A>, Observable<ReturningRepositoryDataContainer<T, A>>>() {
+                .flatMap(new Func1<IRepositoryDataContainer<T, A>, Observable<IRepositoryDataContainer<T, A>>>() {
                     @Override
-                    public Observable<ReturningRepositoryDataContainer<T, A>> call(ReturningRepositoryDataContainer<T, A> container) {
+                    public Observable<IRepositoryDataContainer<T, A>> call(IRepositoryDataContainer<T, A> container) {
                         Observable<IRepositoryDataContainer<T, A>> obs;
                         if (policy.shouldSave(key, container)) {
                             obs = storage.saveAsync(key, container);
@@ -101,9 +101,9 @@ public class RxRepositoryHelper implements IRxRepository {
                         }
                         return obs
                                 //.onErrorResumeNext(Observable.empty())
-                                .map(new Func1<IRepositoryDataContainer<T, A>, ReturningRepositoryDataContainer<T, A>>() {
+                                .map(new Func1<IRepositoryDataContainer<T, A>, IRepositoryDataContainer<T, A>>() {
                                     @Override
-                                    public ReturningRepositoryDataContainer<T, A> call(IRepositoryDataContainer<T, A> container) {
+                                    public IRepositoryDataContainer<T, A> call(IRepositoryDataContainer<T, A> container) {
                                         return new ReturningRepositoryDataContainer<T, A>(container);
                                     }
                                 });

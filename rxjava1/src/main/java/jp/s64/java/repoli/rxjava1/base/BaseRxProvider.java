@@ -46,7 +46,7 @@ public abstract class BaseRxProvider implements IRxProvider {
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> request(IDataKey<T, A> key) {
+    public <T, A> Observable<IRepositoryDataContainer<T, A>> request(final IDataKey<T, A> key) {
         return requestBySerializedKey(key.getSerialized())
                 .map(new Func1<ByteArrayContainer, IRepositoryDataContainer<T, A>>() {
                     @Override
