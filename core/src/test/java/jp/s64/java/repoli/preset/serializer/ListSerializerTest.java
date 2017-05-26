@@ -31,7 +31,7 @@ public class ListSerializerTest {
         ListSerializer serializer = new ListSerializer();
         Set<ISerializer> serializers = Sets.newHashSet(
                 serializer,
-                new StringSerializer()
+                new SerializableSerializer()
         );
 
         assertTrue(serializer.canSerialize(type));
