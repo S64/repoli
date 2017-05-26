@@ -18,7 +18,7 @@ import jp.s64.java.repoli.base.BaseRepository;
 import jp.s64.java.repoli.core.IRepository;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
+import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.DefaultPolicy;
 import jp.s64.java.repoli.preset.ForceRequestPolicy;
 import jp.s64.java.repoli.preset.SimpleOnMemoryStorage;
@@ -159,8 +159,8 @@ public class ParcelableSerializerTest {
         }
 
         @Override
-        public ByteArrayContainer requestBySerializedKey(String serializedKey) {
-            ByteArrayContainer ret = new ByteArrayContainer();
+        public IRepositoryDataContainer<byte[], byte[]> requestBySerializedKey(String serializedKey) {
+            ReturningRepositoryDataContainer<byte[], byte[]> ret = new ReturningRepositoryDataContainer<>();
 
             ParcelableModel original = registered.get(serializedKey);
             if (original == null) {

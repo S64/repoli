@@ -6,7 +6,6 @@ import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.IStorage;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
@@ -45,9 +44,9 @@ public abstract class BaseStorage implements IStorage {
     @Override
     public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<T, A> ret;
-        ByteArrayContainer raw;
+        IRepositoryDataContainer<byte[], byte[]> raw;
         {
-            raw = new ByteArrayContainer(getBySerializedKey(key.getSerialized()));
+            raw = new ReturningRepositoryDataContainer<>(getBySerializedKey(key.getSerialized()));
         }
         return helper.convertBytesToReturning(key, raw);
     }
@@ -68,19 +67,19 @@ public abstract class BaseStorage implements IStorage {
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
         }
-        ByteArrayContainer save = helper.convertContainerToBytes(key, container);
+        IRepositoryDataContainer<byte[], byte[]> save = helper.convertContainerToBytes(key, container);
         {
             saveBySerializedKey(key.getSerialized(), key.getRelatedKey(), save);
         }
         return container;
     }
 
-    public abstract ByteArrayContainer getBySerializedKey(String serializedKey);
+    public abstract IRepositoryDataContainer<byte[], byte[]> getBySerializedKey(String serializedKey);
 
     public abstract int removeBySerializedKey(String serializedKey);
 
     public abstract int removeRelativesByRelatedKey(String relatedKey);
 
-    public abstract void saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container);
+    public abstract void saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<byte[], byte[]> container);
 
 }

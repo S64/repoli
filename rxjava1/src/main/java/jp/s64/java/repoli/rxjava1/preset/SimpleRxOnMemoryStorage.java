@@ -3,7 +3,6 @@ package jp.s64.java.repoli.rxjava1.preset;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.IStorage;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.preset.SimpleOnMemoryStorage;
 import jp.s64.java.repoli.rxjava1.base.BaseRxStorage;
 import rx.Observable;
@@ -18,7 +17,7 @@ public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
     private final SimpleOnMemoryStorage synchronous = new SimpleOnMemoryStorage();
 
     @Override
-    public Observable<ByteArrayContainer> getBySerializedKey(String serializedKey) {
+    public Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(String serializedKey) {
         return Observable.just(synchronous.getBySerializedKey(serializedKey));
     }
 
@@ -33,7 +32,7 @@ public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
     }
 
     @Override
-    public Observable<Void> saveBySerializedKey(final String serializedKey, final String relatedKey, final ByteArrayContainer container) {
+    public Observable<Void> saveBySerializedKey(final String serializedKey, final String relatedKey, final IRepositoryDataContainer<byte[], byte[]> container) {
         return Observable
                 .<Void>just(null)
                 .doOnNext(new Action1<Object>() {

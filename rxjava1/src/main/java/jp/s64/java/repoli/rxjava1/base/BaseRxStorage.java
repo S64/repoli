@@ -6,7 +6,6 @@ import jp.s64.java.repoli.base.StorageHelper;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.rxjava1.core.IRxStorage;
 import rx.Observable;
@@ -48,9 +47,9 @@ public abstract class BaseRxStorage implements IRxStorage {
     @Override
     public <T, A> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
         return getBySerializedKey(key.getSerialized())
-                .map(new Func1<ByteArrayContainer, IRepositoryDataContainer<T, A>>() {
+                .map(new Func1<IRepositoryDataContainer<byte[], byte[]>, IRepositoryDataContainer<T, A>>() {
                     @Override
-                    public IRepositoryDataContainer<T, A> call(ByteArrayContainer bytes) {
+                    public IRepositoryDataContainer<T, A> call(IRepositoryDataContainer<byte[], byte[]> bytes) {
                         return helper.convertBytesToReturning(key, bytes);
                     }
                 });
@@ -72,7 +71,7 @@ public abstract class BaseRxStorage implements IRxStorage {
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
         }
-        ByteArrayContainer save = helper.convertContainerToBytes(key, container);
+        IRepositoryDataContainer<byte[], byte[]> save = helper.convertContainerToBytes(key, container);
         return saveBySerializedKey(key.getSerialized(), key.getRelatedKey(), save)
                 .map(new Func1<Void, IRepositoryDataContainer<T, A>>() {
                     @Override
@@ -82,12 +81,12 @@ public abstract class BaseRxStorage implements IRxStorage {
                 });
     }
 
-    public abstract Observable<ByteArrayContainer> getBySerializedKey(String serializedKey);
+    public abstract Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(String serializedKey);
 
     public abstract Observable<Integer> removeBySerializedKey(String serializedKey);
 
     public abstract Observable<Integer> removeRelativesByRelatedKey(String relatedKey);
 
-    public abstract Observable<Void> saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container);
+    public abstract Observable<Void> saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<byte[], byte[]> container);
 
 }

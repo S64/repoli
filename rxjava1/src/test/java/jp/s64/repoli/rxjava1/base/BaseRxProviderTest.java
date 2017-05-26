@@ -7,7 +7,8 @@ import org.junit.Test;
 
 import jp.s64.java.repoli.core.DataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
+import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
 import jp.s64.java.repoli.rxjava1.base.BaseRxProvider;
 import rx.Observable;
@@ -26,17 +27,17 @@ public class BaseRxProviderTest {
         final DataKey<String, String> key = new DataKey<>(TypeToken.of(String.class), TypeToken.of(String.class), "", "");
 
         final String bodyValue, attachmentValue;
-        final ByteArrayContainer org = new ByteArrayContainer();
+        final ReturningRepositoryDataContainer<byte[], byte[]> org = new ReturningRepositoryDataContainer<>();
         {
-            org.setBody(SerializableSerializer.INSTANCE.serialize(key.getBodyType(), bodyValue = "body-value", Sets.newHashSet()));
-            org.setAttachment(SerializableSerializer.INSTANCE.serialize(key.getBodyType(), attachmentValue = "attachment-value", Sets.newHashSet()));
+            org.setBody(SerializableSerializer.INSTANCE.serialize(key.getBodyType(), bodyValue = "body-value", Sets.<ISerializer>newHashSet()));
+            org.setAttachment(SerializableSerializer.INSTANCE.serialize(key.getBodyType(), attachmentValue = "attachment-value", Sets.<ISerializer>newHashSet()));
         }
 
         BaseRxProvider provider = new BaseRxProvider() {
 
             @Override
-            public Observable<ByteArrayContainer> requestBySerializedKey(String serializedKey) {
-                return Observable.just(org);
+            public Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey) {
+                return Observable.<IRepositoryDataContainer<byte[], byte[]>>just(org);
             }
 
         };

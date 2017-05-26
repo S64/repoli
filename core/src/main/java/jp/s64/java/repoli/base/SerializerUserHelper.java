@@ -13,7 +13,6 @@ import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.ISerializerUser;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.serializer.ListSerializer;
 import jp.s64.java.repoli.preset.serializer.MapSerializer;
@@ -86,7 +85,7 @@ public class SerializerUserHelper implements ISerializerUser {
         throw SerializerNotFoundException.instantiate(serializers, type);
     }
 
-    public <T, A> ReturningRepositoryDataContainer<T, A> convertBytesToReturning(IDataKey<T, A> key, ByteArrayContainer bytes) {
+    public <T, A> ReturningRepositoryDataContainer<T, A> convertBytesToReturning(IDataKey<T, A> key, IRepositoryDataContainer<byte[], byte[]> bytes) {
         ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
         {
             ret.setBody(deserializeByClass(
@@ -105,8 +104,8 @@ public class SerializerUserHelper implements ISerializerUser {
         return ret;
     }
 
-    public <T, A> ByteArrayContainer convertContainerToBytes(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
-        ByteArrayContainer ret = new ByteArrayContainer();
+    public <T, A> IRepositoryDataContainer<byte[], byte[]> convertContainerToBytes(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
+        ReturningRepositoryDataContainer<byte[], byte[]> ret = new ReturningRepositoryDataContainer<>();
         {
             byte[] bodyBytes = serializeByClass(
                     key.getBodyType(),

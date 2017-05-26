@@ -7,7 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import jp.s64.java.repoli.base.BaseStorage;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
+import jp.s64.java.repoli.core.IRepositoryDataContainer;
+import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -18,13 +19,13 @@ public class SimpleOnMemoryStorage extends BaseStorage {
     private final Map<String, UUID> byKey = new HashMap<>();
     private final Map<String, Set<UUID>> byRelatedKey = new HashMap<>();
 
-    private final Map<UUID, ByteArrayContainer> db = new HashMap<>();
+    private final Map<UUID, IRepositoryDataContainer<byte[], byte[]>> db = new HashMap<>();
 
     @Override
-    public ByteArrayContainer getBySerializedKey(String serializedKey) {
+    public IRepositoryDataContainer<byte[], byte[]> getBySerializedKey(String serializedKey) {
         UUID uuid = byKey.get(serializedKey);
-        ByteArrayContainer item = uuid != null ? db.get(uuid) : null;
-        return item != null ? new ByteArrayContainer(item) : new ByteArrayContainer();
+        IRepositoryDataContainer<byte[], byte[]> item = uuid != null ? db.get(uuid) : null;
+        return item != null ? new ReturningRepositoryDataContainer<>(item) : new ReturningRepositoryDataContainer<byte[], byte[]>();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class SimpleOnMemoryStorage extends BaseStorage {
     }
 
     @Override
-    public void saveBySerializedKey(String serializedKey, String relatedKey, ByteArrayContainer container) {
+    public void saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<byte[], byte[]> container) {
         UUID oldId, newId;
         {
             newId = UUID.randomUUID();

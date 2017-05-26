@@ -9,7 +9,8 @@ import org.junit.Test;
 
 import jp.s64.java.repoli.core.DataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
+import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.DefaultPolicy;
 import jp.s64.java.repoli.preset.ForceRequestPolicy;
 import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
@@ -45,11 +46,11 @@ public class RxRepositoryHelperTest {
     public void test() {
         DataKey<String, String> key = new DataKey<>(TypeToken.of(String.class), TypeToken.of(String.class), "single-key", "relative-key");
         final String bodyValue, attachmentValue;
-        ByteArrayContainer org = new ByteArrayContainer();
+        final ReturningRepositoryDataContainer<byte[], byte[]> org = new ReturningRepositoryDataContainer<>();
         {
             SerializableSerializer serializer = SerializableSerializer.INSTANCE;
-            org.setBody(serializer.serialize(key.getBodyType(), bodyValue = "body-value", Sets.newHashSet()));
-            org.setAttachment(serializer.serialize(key.getAttachmentType(), attachmentValue = "attachment-value", Sets.newHashSet()));
+            org.setBody(serializer.serialize(key.getBodyType(), bodyValue = "body-value", Sets.<ISerializer>newHashSet()));
+            org.setAttachment(serializer.serialize(key.getAttachmentType(), attachmentValue = "attachment-value", Sets.<ISerializer>newHashSet()));
         }
 
         RxRepositoryHelper helper = new RxRepositoryHelper();
@@ -57,8 +58,8 @@ public class RxRepositoryHelperTest {
         {
             IRxProvider provider = new BaseRxProvider() {
                 @Override
-                public Observable<ByteArrayContainer> requestBySerializedKey(String serializedKey) {
-                    return Observable.just(org);
+                public Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey) {
+                    return Observable.<IRepositoryDataContainer<byte[], byte[]>>just(org);
                 }
             };
 
@@ -78,7 +79,7 @@ public class RxRepositoryHelperTest {
 
         IRxProvider provider = new BaseRxProvider() {
             @Override
-            public Observable<ByteArrayContainer> requestBySerializedKey(String serializedKey) {
+            public Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey) {
                 throw new UnsupportedOperationException();
             }
         };

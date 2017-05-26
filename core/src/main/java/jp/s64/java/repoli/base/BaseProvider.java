@@ -6,7 +6,6 @@ import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IProvider;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.internal.ByteArrayContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
@@ -45,16 +44,16 @@ public abstract class BaseProvider implements IProvider {
     @Override
     public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<T, A> ret;
-        ByteArrayContainer raw;
+        ReturningRepositoryDataContainer<byte[], byte[]> raw;
         {
             String serialized = key.getSerialized();
-            raw = new ByteArrayContainer(requestBySerializedKey(serialized));
+            raw = new ReturningRepositoryDataContainer<>(requestBySerializedKey(serialized));
             raw.setRequestedAtTimeMillis(System.currentTimeMillis());
             raw.setSavedAtTimeMillis(System.currentTimeMillis());
         }
         return helper.convertBytesToReturning(key, raw);
     }
 
-    public abstract ByteArrayContainer requestBySerializedKey(String serializedKey);
+    public abstract IRepositoryDataContainer<byte[], byte[]> requestBySerializedKey(String serializedKey);
 
 }
