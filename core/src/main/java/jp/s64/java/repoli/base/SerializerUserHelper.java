@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.s64.java.repoli.core.IDataKey;
+import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
 import jp.s64.java.repoli.core.ISerializerUser;
+import jp.s64.java.repoli.internal.ByteArrayContainer;
+import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.serializer.ListSerializer;
 import jp.s64.java.repoli.preset.serializer.MapSerializer;
 import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
@@ -80,6 +84,48 @@ public class SerializerUserHelper implements ISerializerUser {
             return serializer.serialize(type, deserialized, serializers);
         }
         throw SerializerNotFoundException.instantiate(serializers, type);
+    }
+
+    public <T, A> ReturningRepositoryDataContainer<T, A> convertBytesToReturning(IDataKey<T, A> key, ByteArrayContainer bytes) {
+        ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
+        {
+            ret.setBody(deserializeByClass(
+                    key.getBodyType(),
+                    bytes.getBody() != null ? bytes.getBody() : new byte[0]
+            ));
+            ret.setAttachment(deserializeByClass(
+                    key.getAttachmentType(),
+                    bytes.getAttachment() != null ? bytes.getAttachment() : new byte[0]
+            ));
+        }
+        {
+            ret.setRequestedAtTimeMillis(bytes.getRequestedAtTimeMillis());
+            ret.setSavedAtTimeMillis(bytes.getSavedAtTimeMillis());
+        }
+        return ret;
+    }
+
+    public <T, A> ByteArrayContainer convertContainerToBytes(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
+        ByteArrayContainer ret = new ByteArrayContainer();
+        {
+            byte[] bodyBytes = serializeByClass(
+                    key.getBodyType(),
+                    container.getBody()
+            );
+            ret.setBody(bodyBytes.length > 0 ? bodyBytes : null);
+        }
+        {
+            byte[] attachmentBytes = serializeByClass(
+                    key.getAttachmentType(),
+                    container.getAttachment()
+            );
+            ret.setAttachment(attachmentBytes.length > 0 ? attachmentBytes : null);
+        }
+        {
+            ret.setRequestedAtTimeMillis(container.getRequestedAtTimeMillis());
+            ret.setSavedAtTimeMillis(container.getSavedAtTimeMillis());
+        }
+        return ret;
     }
 
     public static class SerializerNotFoundException extends RuntimeException {

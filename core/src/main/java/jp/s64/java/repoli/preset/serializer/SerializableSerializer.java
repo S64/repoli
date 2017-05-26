@@ -34,21 +34,23 @@ public class SerializableSerializer implements ISerializer {
         ObjectInputStream ois = null;
 
         T ret = null;
-        try {
-            ois = new ObjectInputStream(in);
-            ret = (T) ois.readObject();
-        } catch (IOException e) {
-            throw new SerializableSerializerException(e);
-        } catch (ClassNotFoundException e) {
-            throw new SerializableSerializerException(e);
-        } finally {
+        if (serialized != null && serialized.length > 0) {
             try {
-                if (ois != null) {
-                    ois.close();
-                }
-                in.close();
+                ois = new ObjectInputStream(in);
+                ret = (T) ois.readObject();
             } catch (IOException e) {
                 throw new SerializableSerializerException(e);
+            } catch (ClassNotFoundException e) {
+                throw new SerializableSerializerException(e);
+            } finally {
+                try {
+                    if (ois != null) {
+                        ois.close();
+                    }
+                    in.close();
+                } catch (IOException e) {
+                    throw new SerializableSerializerException(e);
+                }
             }
         }
         return ret;

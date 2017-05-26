@@ -15,57 +15,41 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 public abstract class BaseStorage implements IStorage {
 
-    private final SerializerUserHelper serializers = new SerializerUserHelper();
+    private final StorageHelper helper = new StorageHelper();
 
     @Override
     public void addSerializer(ISerializer serializer) {
-        serializers.addSerializer(serializer);
+        helper.addSerializer(serializer);
     }
 
     @Override
     public void removeSerializer(ISerializer serializer) {
-        serializers.removeSerializer(serializer);
+        helper.removeSerializer(serializer);
     }
 
     @Override
     public void addSerializer(Collection<ISerializer> serializer) {
-        serializers.addSerializer(serializer);
+        helper.addSerializer(serializer);
     }
 
     @Override
     public void removeSerializer(Collection<ISerializer> serializer) {
-        serializers.removeSerializer(serializer);
+        helper.removeSerializer(serializer);
     }
 
     @Override
     public void clearSerializer() {
-        serializers.clearSerializer();
+        helper.clearSerializer();
     }
 
     @Override
     public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
-        ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
+        ReturningRepositoryDataContainer<T, A> ret;
         ByteArrayContainer raw;
         {
             raw = new ByteArrayContainer(getBySerializedKey(key.getSerialized()));
         }
-        {
-            ret.setBody(
-                    serializers.deserializeByClass(
-                            key.getBodyType(),
-                            raw.getBody() != null ? raw.getBody() : new byte[0]
-                    )
-            );
-            ret.setAttachment(
-                    serializers.deserializeByClass(
-                            key.getAttachmentType(),
-                            raw.getAttachment() != null ? raw.getAttachment() : new byte[0]
-                    )
-            );
-            ret.setSavedAtTimeMillis(raw.getSavedAtTimeMillis());
-            ret.setRequestedAtTimeMillis(raw.getRequestedAtTimeMillis());
-        }
-        return ret;
+        return helper.convertBytesToReturning(key, raw);
     }
 
     @Override
@@ -84,25 +68,7 @@ public abstract class BaseStorage implements IStorage {
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
         }
-        ByteArrayContainer save = new ByteArrayContainer();
-        {
-            byte[] bodyBytes = serializers.serializeByClass(
-                    key.getBodyType(),
-                    container.getBody()
-            );
-            save.setBody(bodyBytes.length > 0 ? bodyBytes : null);
-        }
-        {
-            byte[] attachmentBytes = serializers.serializeByClass(
-                    key.getAttachmentType(),
-                    container.getAttachment()
-            );
-            save.setAttachment(attachmentBytes.length > 0 ? attachmentBytes : null);
-        }
-        {
-            save.setRequestedAtTimeMillis(container.getRequestedAtTimeMillis());
-            save.setSavedAtTimeMillis(container.getSavedAtTimeMillis());
-        }
+        ByteArrayContainer save = helper.convertContainerToBytes(key, container);
         {
             saveBySerializedKey(key.getSerialized(), key.getRelatedKey(), save);
         }

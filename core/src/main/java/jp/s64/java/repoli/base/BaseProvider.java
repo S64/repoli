@@ -15,60 +15,44 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 public abstract class BaseProvider implements IProvider {
 
-    private final SerializerUserHelper serializers = new SerializerUserHelper();
+    private final ProviderHelper helper = new ProviderHelper();
 
     @Override
     public void addSerializer(ISerializer serializer) {
-        serializers.addSerializer(serializer);
+        helper.addSerializer(serializer);
     }
 
     @Override
     public void removeSerializer(ISerializer serializer) {
-        serializers.removeSerializer(serializer);
+        helper.removeSerializer(serializer);
     }
 
     @Override
     public void addSerializer(Collection<ISerializer> serializer) {
-        serializers.addSerializer(serializer);
+        helper.addSerializer(serializer);
     }
 
     @Override
     public void removeSerializer(Collection<ISerializer> serializer) {
-        serializers.removeSerializer(serializer);
+        helper.removeSerializer(serializer);
     }
 
     @Override
     public void clearSerializer() {
-        serializers.clearSerializer();
+        helper.clearSerializer();
     }
 
     @Override
     public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
-        ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
+        ReturningRepositoryDataContainer<T, A> ret;
         ByteArrayContainer raw;
         {
             String serialized = key.getSerialized();
             raw = new ByteArrayContainer(requestBySerializedKey(serialized));
+            raw.setRequestedAtTimeMillis(System.currentTimeMillis());
+            raw.setSavedAtTimeMillis(System.currentTimeMillis());
         }
-        {
-            ret.setBody(
-                    serializers.deserializeByClass(
-                            key.getBodyType(),
-                            raw.getBody() != null ? raw.getBody() : new byte[0]
-                    )
-            );
-            ret.setAttachment(
-                    serializers.deserializeByClass(
-                            key.getAttachmentType(),
-                            raw.getAttachment() != null ? raw.getAttachment() : new byte[0]
-                    )
-            );
-        }
-        {
-            ret.setRequestedAtTimeMillis(raw.getRequestedAtTimeMillis());
-            //ret.setSavedAtTimeMillis(raw.getSavedAtTimeMillis());
-        }
-        return ret;
+        return helper.convertBytesToReturning(key, raw);
     }
 
     public abstract ByteArrayContainer requestBySerializedKey(String serializedKey);
