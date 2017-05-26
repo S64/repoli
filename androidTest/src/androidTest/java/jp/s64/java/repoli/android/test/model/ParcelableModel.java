@@ -11,6 +11,7 @@ import jp.s64.java.repoli.core.IDataKey;
  * Created by shuma on 2017/05/22.
  */
 
+@Deprecated
 public class ParcelableModel implements Parcelable {
 
     private String uuid;

@@ -7,7 +7,7 @@ import com.google.common.reflect.TypeToken;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class ParcelableSerializerTest {
         storage = null;
     }
 
-    @Test
+    @Ignore
     public void test() {
         final String group = "related_key_for_test";
         BaseParcelableProvider provider = new BaseParcelableProvider() {

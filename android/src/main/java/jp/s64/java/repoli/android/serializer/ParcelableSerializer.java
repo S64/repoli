@@ -13,6 +13,7 @@ import jp.s64.java.repoli.core.ISerializer;
  * Created by shuma on 2017/05/22.
  */
 
+@Deprecated
 public class ParcelableSerializer implements ISerializer {
 
     private static final int PARCELABLE_FLAG = 0;
