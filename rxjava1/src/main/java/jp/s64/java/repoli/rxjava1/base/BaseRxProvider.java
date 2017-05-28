@@ -2,6 +2,7 @@ package jp.s64.java.repoli.rxjava1.base;
 
 import java.util.Collection;
 
+import jp.s64.java.repoli.base.BaseProvider;
 import jp.s64.java.repoli.base.ProviderHelper;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
@@ -48,18 +49,20 @@ public abstract class BaseRxProvider implements IRxProvider, ISerializerUser {
     @Override
     public <T, A> Observable<IRepositoryDataContainer<T, A>> request(final IDataKey<T, A> key) {
         return requestBySerializedKey(key.getSerialized())
-                .map(new Func1<IRepositoryDataContainer<byte[], byte[]>, IRepositoryDataContainer<T, A>>() {
+                .map(new Func1<BaseProvider.ProvidedContainer, IRepositoryDataContainer<T, A>>() {
                     @Override
-                    public IRepositoryDataContainer<T, A> call(IRepositoryDataContainer<byte[], byte[]> bytes) {
-                        ReturningRepositoryDataContainer<T, A> ret = helper.convertBytesToReturning(key, bytes);
+                    public IRepositoryDataContainer<T, A> call(BaseProvider.ProvidedContainer bytes) {
+                        ReturningRepositoryDataContainer<byte[], byte[]> org = new ReturningRepositoryDataContainer<byte[], byte[]>();
                         {
-                            ret.setRequestedAtTimeMillis(System.currentTimeMillis());
+                            org.setBody(bytes.getBody());
+                            org.setAttachment(bytes.getAttachment());
+                            org.setRequestedAtTimeMillis(bytes.getRequestedAtTimeMillis());
                         }
-                        return ret;
+                        return helper.convertBytesToReturning(key, org);
                     }
                 });
     }
 
-    public abstract Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey);
+    public abstract Observable<BaseProvider.ProvidedContainer> requestBySerializedKey(String serializedKey);
 
 }

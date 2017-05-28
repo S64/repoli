@@ -46,13 +46,53 @@ public abstract class BaseProvider implements IProvider, ISerializerUser {
     public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<byte[], byte[]> raw;
         {
-            String serialized = key.getSerialized();
-            raw = new ReturningRepositoryDataContainer<>(requestBySerializedKey(serialized));
-            raw.setRequestedAtTimeMillis(System.currentTimeMillis());
+            ProvidedContainer ret = requestBySerializedKey(key.getSerialized());
+            raw = new ReturningRepositoryDataContainer<>();
+            {
+                raw.setBody(ret.getBody());
+                raw.setAttachment(ret.getAttachment());
+                raw.setRequestedAtTimeMillis(ret.getRequestedAtTimeMillis());
+            }
         }
         return helper.convertBytesToReturning(key, raw);
     }
 
-    public abstract IRepositoryDataContainer<byte[], byte[]> requestBySerializedKey(String serializedKey);
+    public abstract ProvidedContainer requestBySerializedKey(String serializedKey);
+
+    public static class ProvidedContainer {
+
+        private byte[] body;
+        private byte[] attachment;
+        private Long requestedAtTimeMillis;
+
+        public ProvidedContainer(Long requestedAtTimeMillis) {
+            setRequestedAtTimeMillis(requestedAtTimeMillis);
+        }
+
+        public byte[] getBody() {
+            return body;
+        }
+
+        public void setBody(byte[] body) {
+            this.body = body;
+        }
+
+        public byte[] getAttachment() {
+            return attachment;
+        }
+
+        public void setAttachment(byte[] attachment) {
+            this.attachment = attachment;
+        }
+
+        public Long getRequestedAtTimeMillis() {
+            return requestedAtTimeMillis;
+        }
+
+        public void setRequestedAtTimeMillis(Long requestedAtTimeMillis) {
+            this.requestedAtTimeMillis = requestedAtTimeMillis;
+        }
+
+    }
 
 }

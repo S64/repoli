@@ -5,7 +5,7 @@ import com.google.common.reflect.TypeToken;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,6 @@ import jp.s64.java.repoli.base.BaseRepository;
 import jp.s64.java.repoli.core.IRepository;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.preset.DefaultPolicy;
 import jp.s64.java.repoli.preset.ForceRequestPolicy;
 import jp.s64.java.repoli.preset.SimpleOnMemoryStorage;
@@ -52,7 +51,7 @@ public class ParcelableSerializerTest {
         storage = null;
     }
 
-    @Ignore
+    @Test
     public void test() {
         final String group = "related_key_for_test";
         BaseParcelableProvider provider = new BaseParcelableProvider() {
@@ -159,12 +158,14 @@ public class ParcelableSerializerTest {
         }
 
         @Override
-        public IRepositoryDataContainer<byte[], byte[]> requestBySerializedKey(String serializedKey) {
-            ReturningRepositoryDataContainer<byte[], byte[]> ret = new ReturningRepositoryDataContainer<>();
+        public ProvidedContainer requestBySerializedKey(String serializedKey) {
+            ProvidedContainer ret = new ProvidedContainer(null);
 
             ParcelableModel original = registered.get(serializedKey);
             if (original == null) {
                 return ret;
+            } else {
+                ret.setRequestedAtTimeMillis(System.currentTimeMillis());
             }
 
             {
@@ -175,9 +176,6 @@ public class ParcelableSerializerTest {
                         Sets.<ISerializer>newHashSet(serializer)
                 ));
                 ret.setAttachment(new byte[0]);
-            }
-            {
-                ret.setRequestedAtTimeMillis(System.currentTimeMillis());
             }
 
             return ret;

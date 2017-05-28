@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import jp.s64.java.repoli.base.BaseProvider;
 import jp.s64.java.repoli.core.DataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
@@ -58,8 +59,13 @@ public class RxRepositoryHelperTest {
         {
             IRxProvider provider = new BaseRxProvider() {
                 @Override
-                public Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey) {
-                    return Observable.<IRepositoryDataContainer<byte[], byte[]>>just(org);
+                public Observable<BaseProvider.ProvidedContainer> requestBySerializedKey(String serializedKey) {
+                    BaseProvider.ProvidedContainer ret = new BaseProvider.ProvidedContainer(System.currentTimeMillis());
+                    {
+                        ret.setBody(org.getBody());
+                        ret.setAttachment(org.getAttachment());
+                    }
+                    return Observable.just(ret);
                 }
             };
 
@@ -79,7 +85,7 @@ public class RxRepositoryHelperTest {
 
         IRxProvider provider = new BaseRxProvider() {
             @Override
-            public Observable<IRepositoryDataContainer<byte[], byte[]>> requestBySerializedKey(String serializedKey) {
+            public Observable<BaseProvider.ProvidedContainer> requestBySerializedKey(String serializedKey) {
                 throw new UnsupportedOperationException();
             }
         };
