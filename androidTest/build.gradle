@@ -1,19 +1,15 @@
 apply plugin: 'com.android.application'
 
-ext {
-    parceler_version = '1.1.8'
-}
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion android_compilesdk_version
+    buildToolsVersion android_buildtools_version
 
     defaultConfig {
         applicationId "jp.s64.java.repoli.android.test"
-        minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion android_minsdk_version
+        targetSdkVersion android_targetsdk_version
+        versionCode android_versioncode
+        versionName repoli_version_name
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -24,22 +20,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+    androidTestCompile("com.android.support.test.espresso:espresso-core:${espresso_version}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
 
-    //androidTestCompile "org.parceler:parceler-api:${parceler_version}"
-    //androidTestAnnotationProcessor "org.parceler:parceler:${parceler_version}"
+    testCompile "junit:junit:${junit_version}"
+    compile "com.android.support:appcompat-v7:${android_support_version}"
 
     compile project(':android')
 }
