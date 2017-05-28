@@ -44,13 +44,11 @@ public abstract class BaseProvider implements IProvider, ISerializerUser {
 
     @Override
     public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
-        ReturningRepositoryDataContainer<T, A> ret;
         ReturningRepositoryDataContainer<byte[], byte[]> raw;
         {
             String serialized = key.getSerialized();
             raw = new ReturningRepositoryDataContainer<>(requestBySerializedKey(serialized));
             raw.setRequestedAtTimeMillis(System.currentTimeMillis());
-            raw.setSavedAtTimeMillis(System.currentTimeMillis());
         }
         return helper.convertBytesToReturning(key, raw);
     }
