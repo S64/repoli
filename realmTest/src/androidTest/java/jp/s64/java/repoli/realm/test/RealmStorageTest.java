@@ -21,6 +21,7 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.realm.RealmStorage;
 import jp.s64.java.repoli.realm.RepoliRealmModule;
 import jp.s64.java.repoli.realm.StorageObject;
+import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.TestSubscriber;
 
@@ -95,7 +96,7 @@ public class RealmStorageTest {
 
     @Test
     public void test() {
-        RealmStorage storage = new RealmStorage(AndroidSchedulers.mainThread()) {
+        RealmStorage storage = new RealmStorage() {
 
             @Override
             public Realm getRealmInstance() {
@@ -105,6 +106,11 @@ public class RealmStorageTest {
             @Override
             public boolean closeAfter() {
                 return false;
+            }
+
+            @Override
+            public Scheduler getScheduler() {
+                return AndroidSchedulers.mainThread();
             }
 
         };

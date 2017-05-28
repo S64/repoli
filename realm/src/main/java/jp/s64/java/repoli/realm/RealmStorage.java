@@ -7,9 +7,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
+import jp.s64.java.repoli.realm.core.IRealmStorage;
 import jp.s64.java.repoli.rxjava1.base.BaseRxStorage;
 import rx.Observable;
-import rx.Scheduler;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -17,13 +17,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/27.
  */
 
-public abstract class RealmStorage extends BaseRxStorage {
-
-    private Scheduler scheduler;
-
-    public RealmStorage(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
+public abstract class RealmStorage extends BaseRxStorage implements IRealmStorage {
 
     @Override
     public Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(final String serializedKey) {
@@ -36,7 +30,7 @@ public abstract class RealmStorage extends BaseRxStorage {
 
         return Observable
                 .<Void>just(null)
-                .observeOn(scheduler)
+                .observeOn(getScheduler())
                 .map(new Func1<Void, RealmResults<StorageObject>>() {
 
                     @Override
@@ -73,7 +67,7 @@ public abstract class RealmStorage extends BaseRxStorage {
 
         return Observable
                 .<Void>just(null)
-                .observeOn(scheduler)
+                .observeOn(getScheduler())
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void _) {
@@ -122,7 +116,7 @@ public abstract class RealmStorage extends BaseRxStorage {
 
         return Observable
                 .<Void>just(null)
-                .observeOn(scheduler)
+                .observeOn(getScheduler())
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void _) {
@@ -172,7 +166,7 @@ public abstract class RealmStorage extends BaseRxStorage {
 
         return Observable
                 .<Void>just(null)
-                .observeOn(scheduler)
+                .observeOn(getScheduler())
                 .doOnNext(new Action1<Void>() {
                     @Override
                     public void call(Void _) {
@@ -216,9 +210,5 @@ public abstract class RealmStorage extends BaseRxStorage {
                     }
                 });
     }
-
-    public abstract Realm getRealmInstance();
-
-    public abstract boolean closeAfter();
 
 }
