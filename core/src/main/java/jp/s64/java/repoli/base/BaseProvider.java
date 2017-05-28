@@ -6,13 +6,14 @@ import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IProvider;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.core.ISerializerUser;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 /**
  * Created by shuma on 2017/05/22.
  */
 
-public abstract class BaseProvider implements IProvider {
+public abstract class BaseProvider implements IProvider, ISerializerUser {
 
     private final ProviderHelper helper = new ProviderHelper();
 

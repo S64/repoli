@@ -5,6 +5,7 @@ import java.util.Collection;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.core.ISerializerUser;
 import jp.s64.java.repoli.core.IStorage;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
@@ -12,7 +13,7 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
  * Created by shuma on 2017/05/19.
  */
 
-public abstract class BaseStorage implements IStorage {
+public abstract class BaseStorage implements IStorage, ISerializerUser {
 
     private final StorageHelper helper = new StorageHelper();
 

@@ -6,6 +6,7 @@ import jp.s64.java.repoli.base.ProviderHelper;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.ISerializer;
+import jp.s64.java.repoli.core.ISerializerUser;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.rxjava1.core.IRxProvider;
 import rx.Observable;
@@ -15,7 +16,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/26.
  */
 
-public abstract class BaseRxProvider implements IRxProvider {
+public abstract class BaseRxProvider implements IRxProvider, ISerializerUser {
 
     private final ProviderHelper helper = new ProviderHelper();
 
