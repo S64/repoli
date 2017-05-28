@@ -17,7 +17,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/27.
  */
 
-public abstract class RealmStorage extends BaseRxStorage implements IRealmStorage {
+public abstract class RealmBinaryStorage extends BaseRxStorage implements IRealmStorage {
 
     @Override
     public Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(final String serializedKey) {
@@ -31,20 +31,20 @@ public abstract class RealmStorage extends BaseRxStorage implements IRealmStorag
         return Observable
                 .<Void>just(null)
                 .observeOn(getScheduler())
-                .map(new Func1<Void, RealmResults<StorageObject>>() {
+                .map(new Func1<Void, RealmResults<BinaryStorageObject>>() {
 
                     @Override
-                    public RealmResults<StorageObject> call(Void _) {
+                    public RealmResults<BinaryStorageObject> call(Void _) {
                         return realm.get()
-                                .where(StorageObject.class)
+                                .where(BinaryStorageObject.class)
                                 .equalTo("serializedKey", serializedKey)
                                 .findAll();
                     }
 
                 })
-                .map(new Func1<RealmResults<StorageObject>, IRepositoryDataContainer<byte[], byte[]>>() {
+                .map(new Func1<RealmResults<BinaryStorageObject>, IRepositoryDataContainer<byte[], byte[]>>() {
                     @Override
-                    public IRepositoryDataContainer<byte[], byte[]> call(RealmResults<StorageObject> rows) {
+                    public IRepositoryDataContainer<byte[], byte[]> call(RealmResults<BinaryStorageObject> rows) {
                         return rows.size() > 0 ? new ReturningRepositoryDataContainer<byte[], byte[]>(rows.first()) : new ReturningRepositoryDataContainer<byte[], byte[]>();
                     }
                 })
@@ -75,20 +75,20 @@ public abstract class RealmStorage extends BaseRxStorage implements IRealmStorag
 
                     }
                 })
-                .map(new Func1<Void, RealmResults<StorageObject>>() {
+                .map(new Func1<Void, RealmResults<BinaryStorageObject>>() {
 
                     @Override
-                    public RealmResults<StorageObject> call(Void _) {
+                    public RealmResults<BinaryStorageObject> call(Void _) {
                         return realm.get()
-                                .where(StorageObject.class)
+                                .where(BinaryStorageObject.class)
                                 .equalTo("serializedKey", serializedKey)
                                 .findAll();
                     }
 
                 })
-                .map(new Func1<RealmResults<StorageObject>, Integer>() {
+                .map(new Func1<RealmResults<BinaryStorageObject>, Integer>() {
                     @Override
-                    public Integer call(RealmResults<StorageObject> rows) {
+                    public Integer call(RealmResults<BinaryStorageObject> rows) {
                         int ret = rows.size();
                         {
                             rows.deleteAllFromRealm();
@@ -123,21 +123,21 @@ public abstract class RealmStorage extends BaseRxStorage implements IRealmStorag
                         realm.get().beginTransaction();
                     }
                 })
-                .map(new Func1<Void, RealmResults<StorageObject>>() {
+                .map(new Func1<Void, RealmResults<BinaryStorageObject>>() {
 
                     @Override
-                    public RealmResults<StorageObject> call(Void _) {
+                    public RealmResults<BinaryStorageObject> call(Void _) {
                         return realm.get()
-                                .where(StorageObject.class)
+                                .where(BinaryStorageObject.class)
                                 .equalTo("relatedKey", relatedKey)
                                 .findAll();
                     }
 
                 })
-                .map(new Func1<RealmResults<StorageObject>, Integer>() {
+                .map(new Func1<RealmResults<BinaryStorageObject>, Integer>() {
 
                     @Override
-                    public Integer call(RealmResults<StorageObject> rows) {
+                    public Integer call(RealmResults<BinaryStorageObject> rows) {
                         int ret = rows.size();
                         {
                             rows.deleteAllFromRealm();
@@ -173,10 +173,10 @@ public abstract class RealmStorage extends BaseRxStorage implements IRealmStorag
                         realm.get().beginTransaction();
                     }
                 })
-                .map(new Func1<Void, StorageObject>() {
+                .map(new Func1<Void, BinaryStorageObject>() {
                     @Override
-                    public StorageObject call(Void _) {
-                        StorageObject obj = realm.get().createObject(StorageObject.class, serializedKey);
+                    public BinaryStorageObject call(Void _) {
+                        BinaryStorageObject obj = realm.get().createObject(BinaryStorageObject.class, serializedKey);
                         {
                             //obj.setSerializedKey(serializedKey);
                             obj.setRelatedKey(relatedKey);
@@ -190,22 +190,22 @@ public abstract class RealmStorage extends BaseRxStorage implements IRealmStorag
                         return obj;
                     }
                 })
-                .doOnNext(new Action1<StorageObject>() {
+                .doOnNext(new Action1<BinaryStorageObject>() {
                     @Override
-                    public void call(StorageObject obj) {
+                    public void call(BinaryStorageObject obj) {
                         realm.get().insertOrUpdate(obj);
                     }
                 })
-                .doOnNext(new Action1<StorageObject>() {
+                .doOnNext(new Action1<BinaryStorageObject>() {
                     @Override
-                    public void call(StorageObject obj) {
+                    public void call(BinaryStorageObject obj) {
                         realm.get().commitTransaction();
                         if (closeAfter()) realm.get().close();
                     }
                 })
-                .map(new Func1<StorageObject, Void>() {
+                .map(new Func1<BinaryStorageObject, Void>() {
                     @Override
-                    public Void call(StorageObject obj) {
+                    public Void call(BinaryStorageObject obj) {
                         return null; // succeed
                     }
                 });

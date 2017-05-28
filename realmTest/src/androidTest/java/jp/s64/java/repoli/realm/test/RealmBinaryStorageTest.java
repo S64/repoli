@@ -18,9 +18,9 @@ import jp.s64.java.repoli.core.DataKey;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
-import jp.s64.java.repoli.realm.RealmStorage;
+import jp.s64.java.repoli.realm.BinaryStorageObject;
+import jp.s64.java.repoli.realm.RealmBinaryStorage;
 import jp.s64.java.repoli.realm.RepoliRealmModule;
-import jp.s64.java.repoli.realm.StorageObject;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.TestSubscriber;
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNull;
  * Created by shuma on 2017/05/27.
  */
 
-public class RealmStorageTest {
+public class RealmBinaryStorageTest {
 
     private Context getContext() {
         return InstrumentationRegistry.getTargetContext();
@@ -96,7 +96,7 @@ public class RealmStorageTest {
 
     @Test
     public void test() {
-        RealmStorage storage = new RealmStorage() {
+        RealmBinaryStorage storage = new RealmBinaryStorage() {
 
             @Override
             public Realm getRealmInstance() {
@@ -150,7 +150,7 @@ public class RealmStorageTest {
                 public void run() {
                     assertEquals(
                             0,
-                            instance.where(StorageObject.class).findAll().size()
+                            instance.where(BinaryStorageObject.class).findAll().size()
                     );
                 }
             });
@@ -196,12 +196,12 @@ public class RealmStorageTest {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    RealmResults<StorageObject> result = instance.where(StorageObject.class).findAll();
+                    RealmResults<BinaryStorageObject> result = instance.where(BinaryStorageObject.class).findAll();
                     assertEquals(
                             1,
                             result.size()
                     );
-                    StorageObject ret = result.first();
+                    BinaryStorageObject ret = result.first();
                     assertEquals(key.getSerialized(), ret.getSerializedKey());
                     assertEquals(key.getRelatedKey(), ret.getRelatedKey());
                 }

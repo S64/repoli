@@ -9,7 +9,7 @@ import io.realm.annotations.RealmModule;
 @RealmModule(
         library = true,
         classes = {
-                StorageObject.class
+                BinaryStorageObject.class
         }
 )
 public class RepoliRealmModule {

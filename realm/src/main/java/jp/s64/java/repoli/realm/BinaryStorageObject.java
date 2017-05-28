@@ -11,7 +11,7 @@ import jp.s64.java.repoli.core.IRepositoryDataContainer;
  */
 
 @KeepMember
-public class StorageObject extends RealmObject implements IRepositoryDataContainer<byte[], byte[]> {
+public class BinaryStorageObject extends RealmObject implements IRepositoryDataContainer<byte[], byte[]> {
 
     @PrimaryKey
     private String serializedKey;
