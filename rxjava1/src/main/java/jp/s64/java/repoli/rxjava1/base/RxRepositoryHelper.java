@@ -2,6 +2,7 @@ package jp.s64.java.repoli.rxjava1.base;
 
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IExpirePolicy;
+import jp.s64.java.repoli.core.IRemovePolicy;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.rxjava1.core.IRxProvider;
@@ -107,6 +108,29 @@ public class RxRepositoryHelper<TB, AB> implements IRxRepository<TB, AB> {
                                         return new ReturningRepositoryDataContainer<T, A>(container);
                                     }
                                 });
+                    }
+                });
+    }
+
+    @Override
+    public <T extends TB, A extends AB> Observable<Integer> remove(final IDataKey<T, A> key, final IRxStorage<TB, AB> storage, final IRemovePolicy<TB, AB> policy) {
+        return storage.getAsync(key)
+                .map(new Func1<IRepositoryDataContainer<T, A>, ReturningRepositoryDataContainer<T, A>>() {
+                    @Override
+                    public ReturningRepositoryDataContainer<T, A> call(IRepositoryDataContainer<T, A> org) {
+                        return new ReturningRepositoryDataContainer<>(org);
+                    }
+                })
+                .flatMap(new Func1<ReturningRepositoryDataContainer<T, A>, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(ReturningRepositoryDataContainer<T, A> container) {
+                        return policy.shouldRemoveWithRelatives(key, container) ? storage.removeRelativesAsync(key) : Observable.just(0);
+                    }
+                })
+                .flatMap(new Func1<Integer, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(Integer count) {
+                        return storage.removeAsync(key);
                     }
                 });
     }

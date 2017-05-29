@@ -20,7 +20,7 @@ import rx.Observable;
 public class BaseRxRepository<TB, AB> implements IRxRepository<TB, AB>, IRepository<TB, AB> {
 
     private final IRepository repository;
-    private final RxRepositoryHelper helper = new RxRepositoryHelper();
+    private final RxRepositoryHelper<TB, AB> helper = new RxRepositoryHelper<>();
 
     public BaseRxRepository() {
         repository = new BaseRepository() {
@@ -45,5 +45,10 @@ public class BaseRxRepository<TB, AB> implements IRxRepository<TB, AB>, IReposit
     public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IRxProvider<TB, AB> provider) {
         return helper.get(key, storage, policy, provider);
     }
-    
+
+    @Override
+    public <T extends TB, A extends AB> Observable<Integer> remove(IDataKey<T, A> key, IRxStorage<TB, AB> storage, IRemovePolicy<TB, AB> policy) {
+        return helper.remove(key, storage, policy);
+    }
+
 }
