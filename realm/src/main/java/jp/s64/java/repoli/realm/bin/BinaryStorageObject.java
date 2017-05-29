@@ -1,4 +1,4 @@
-package jp.s64.java.repoli.realm;
+package jp.s64.java.repoli.realm.bin;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Index;

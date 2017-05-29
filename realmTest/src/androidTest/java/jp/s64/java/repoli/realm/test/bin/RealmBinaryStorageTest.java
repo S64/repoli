@@ -1,4 +1,4 @@
-package jp.s64.java.repoli.realm.test;
+package jp.s64.java.repoli.realm.test.bin;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -18,9 +18,9 @@ import jp.s64.java.repoli.core.DataKey;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
-import jp.s64.java.repoli.realm.BinaryStorageObject;
-import jp.s64.java.repoli.realm.RealmBinaryStorage;
 import jp.s64.java.repoli.realm.RepoliRealmModule;
+import jp.s64.java.repoli.realm.bin.BinaryStorageObject;
+import jp.s64.java.repoli.realm.bin.RealmBinaryStorage;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.TestSubscriber;

@@ -1,4 +1,4 @@
-package jp.s64.java.repoli.realm;
+package jp.s64.java.repoli.realm.bin;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -7,6 +7,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
+import jp.s64.java.repoli.realm.bin.BinaryStorageObject;
 import jp.s64.java.repoli.realm.core.IRealmStorage;
 import jp.s64.java.repoli.rxjava1.base.BaseRxStorage;
 import rx.Observable;
