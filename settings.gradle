@@ -1,1 +1,1 @@
-include ':core', ':android', ':androidTest', ':rxjava1', ':realm', ':realmTest'
+include ':core', ':android', ':androidTest', ':rxjava1', ':realm', ':realmTest', ':orma3'
