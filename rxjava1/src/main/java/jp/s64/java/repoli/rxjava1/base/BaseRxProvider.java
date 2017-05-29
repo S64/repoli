@@ -17,7 +17,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/26.
  */
 
-public abstract class BaseRxProvider implements IRxProvider, ISerializerUser {
+public abstract class BaseRxProvider implements IRxProvider<Object, Object>, ISerializerUser {
 
     private final ProviderHelper helper = new ProviderHelper();
 

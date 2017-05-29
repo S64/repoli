@@ -16,7 +16,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/26.
  */
 
-public abstract class BaseRxStorage implements IRxStorage, ISerializerUser {
+public abstract class BaseRxStorage<TB, AB> implements IRxStorage<TB, AB>, ISerializerUser {
 
     private final StorageHelper helper = new StorageHelper();
 
@@ -46,7 +46,7 @@ public abstract class BaseRxStorage implements IRxStorage, ISerializerUser {
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
         return getBySerializedKey(key.getSerialized())
                 .map(new Func1<IRepositoryDataContainer<byte[], byte[]>, IRepositoryDataContainer<T, A>>() {
                     @Override
@@ -67,7 +67,7 @@ public abstract class BaseRxStorage implements IRxStorage, ISerializerUser {
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> saveAsync(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> saveAsync(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
         final ReturningRepositoryDataContainer<T, A> container = new ReturningRepositoryDataContainer<>(original);
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());

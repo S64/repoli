@@ -8,7 +8,7 @@ import rx.Scheduler;
  * Created by shuma on 2017/05/28.
  */
 
-public interface IRealmStorage extends IRxStorage {
+public interface IRealmStorage<TB, TA> extends IRxStorage<TB, TA> {
 
     Realm getRealmInstance();
 

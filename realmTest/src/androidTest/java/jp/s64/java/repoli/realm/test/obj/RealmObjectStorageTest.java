@@ -105,7 +105,12 @@ public class RealmObjectStorageTest {
                 return ret;
             }
         });
-        final Void orgAttachment;
+        final Supplier<TestObject> orgAttachment = Suppliers.memoize(new Supplier<TestObject>() {
+            @Override
+            public TestObject get() {
+                return null;
+            }
+        });
         {
             runOnUiThread(new Runnable() {
                 @Override
@@ -118,18 +123,23 @@ public class RealmObjectStorageTest {
                     instance.commitTransaction();
                 }
             });
-            orgAttachment = null;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    assertNull(orgAttachment.get());
+                }
+            });
             {
                 // no-op
             }
         }
-        final ReturningRepositoryDataContainer<TestObject, Void> orgContainer = new ReturningRepositoryDataContainer<>();
+        final ReturningRepositoryDataContainer<TestObject, TestObject> orgContainer = new ReturningRepositoryDataContainer<>();
         {
             orgContainer.setBody(orgBody.get());
-            orgContainer.setAttachment(orgAttachment);
+            orgContainer.setAttachment(orgAttachment.get());
             orgContainer.setRequestedAtTimeMillis(System.currentTimeMillis());
         }
-        RealmObjectStorage storage = new RealmObjectStorage() {
+        RealmObjectStorage<TestObject, TestObject> storage = new RealmObjectStorage<TestObject, TestObject>() {
 
             @Override
             public Realm getRealmInstance() {
@@ -150,14 +160,14 @@ public class RealmObjectStorageTest {
 
         {
 
-            TestSubscriber<IRepositoryDataContainer<TestObject, Void>> sub = new TestSubscriber<>();
+            TestSubscriber<IRepositoryDataContainer<TestObject, TestObject>> sub = new TestSubscriber<>();
             storage.getAsync(orgBody.get().getKey()).subscribe(sub);
 
             sub.awaitTerminalEvent();
 
             sub.assertNoErrors();
             sub.assertValueCount(1);
-            final IRepositoryDataContainer<TestObject, Void> ret = sub.getOnNextEvents().get(0);
+            final IRepositoryDataContainer<TestObject, TestObject> ret = sub.getOnNextEvents().get(0);
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -171,21 +181,20 @@ public class RealmObjectStorageTest {
         }
 
         {
-
-            TestSubscriber<IRepositoryDataContainer<TestObject, Void>> sub = new TestSubscriber<>();
+            TestSubscriber<IRepositoryDataContainer<TestObject, TestObject>> sub = new TestSubscriber<>();
             storage.saveAsync(orgBody.get().getKey(), orgContainer).subscribe(sub);
 
             sub.awaitTerminalEvent();
 
             sub.assertNoErrors();
             sub.assertValueCount(1);
-            final IRepositoryDataContainer<TestObject, Void> ret = sub.getOnNextEvents().get(0);
+            final IRepositoryDataContainer<TestObject, TestObject> ret = sub.getOnNextEvents().get(0);
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     assertEquals(orgBody.get().getMyValue(), ret.getBody().getMyValue());
-                    assertEquals(orgAttachment, ret.getAttachment());
+                    assertEquals(orgAttachment.get(), ret.getAttachment());
                 }
             });
             assertNotEquals(orgContainer.getSavedAtTimeMillis(), ret.getSavedAtTimeMillis());
@@ -209,14 +218,14 @@ public class RealmObjectStorageTest {
         }
 
         {
-            TestSubscriber<IRepositoryDataContainer<TestObject, Void>> sub = new TestSubscriber<>();
+            TestSubscriber<IRepositoryDataContainer<TestObject, TestObject>> sub = new TestSubscriber<>();
             storage.getAsync(orgBody.get().getKey()).subscribe(sub);
 
             sub.awaitTerminalEvent();
 
             sub.assertNoErrors();
             sub.assertValueCount(1);
-            final IRepositoryDataContainer<TestObject, Void> ret = sub.getOnNextEvents().get(0);
+            final IRepositoryDataContainer<TestObject, TestObject> ret = sub.getOnNextEvents().get(0);
 
             runOnUiThread(new Runnable() {
                 @Override

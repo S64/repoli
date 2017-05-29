@@ -10,7 +10,8 @@ import jp.s64.java.repoli.realm.bin.BinaryStorageObject;
 @RealmModule(
         library = true,
         classes = {
-                BinaryStorageObject.class
+                BinaryStorageObject.class,
+                //
         }
 )
 public class RepoliRealmModule {

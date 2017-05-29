@@ -8,8 +8,8 @@ import rx.Observable;
  * Created by shuma on 2017/05/26.
  */
 
-public interface IRxProvider {
+public interface IRxProvider<TB, AB> {
 
-    <T, A> Observable<IRepositoryDataContainer<T, A>> request(IDataKey<T, A> key);
+    <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> request(IDataKey<T, A> key);
 
 }

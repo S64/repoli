@@ -7,12 +7,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import io.realm.Realm;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 import jp.s64.java.repoli.realm.core.IRealmStorage;
-import jp.s64.java.repoli.rxjava1.core.IRxStorage;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -21,10 +21,10 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/29.
  */
 
-public abstract class RealmObjectStorage implements IRxStorage, IRealmStorage {
+public abstract class RealmObjectStorage<TB extends RealmModel, AB extends RealmModel> implements IRealmStorage<TB, AB> {
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> getAsync(final IDataKey<T, A> key) {
         final Supplier<Realm> realm;
         final Class<? extends SavingObject<?, ?>> clazz;
         {
@@ -186,7 +186,7 @@ public abstract class RealmObjectStorage implements IRxStorage, IRealmStorage {
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> saveAsync(final IDataKey<T, A> key, final IRepositoryDataContainer<T, A> rawContainer) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> saveAsync(final IDataKey<T, A> key, final IRepositoryDataContainer<T, A> rawContainer) {
         final Supplier<Realm> realm;
         final Class<? extends SavingObject<?, ?>> clazz;
         final ReturningRepositoryDataContainer<T, A> container;

@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.android.test.serializer;
 
+import android.os.Parcelable;
+
 import com.google.common.collect.Sets;
 import com.google.common.reflect.TypeToken;
 
@@ -33,13 +35,13 @@ import static org.junit.Assert.assertNull;
 
 public class ParcelableSerializerTest {
 
-    private IRepository repository;
-    private SimpleOnMemoryStorage storage;
+    private IRepository<Parcelable, Void> repository;
+    private SimpleOnMemoryStorage<Parcelable, Void> storage;
 
     @Before
     public void setUp() {
         {
-            repository = new BaseRepository() {
+            repository = new BaseRepository<Parcelable, Void>() {
             };
             storage = new SimpleOnMemoryStorage();
         }
@@ -139,7 +141,7 @@ public class ParcelableSerializerTest {
         }
     }
 
-    public static class BaseParcelableProvider extends BaseProvider {
+    public static class BaseParcelableProvider extends BaseProvider<Parcelable, Void> {
 
         private final ParcelableSerializer serializer = new ParcelableSerializer();
         private final Map<String, ParcelableModel> registered = new HashMap<>();

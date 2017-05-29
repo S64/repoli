@@ -17,7 +17,7 @@ import rx.Observable;
  * Created by shuma on 2017/05/26.
  */
 
-public class BaseRxRepository implements IRxRepository, IRepository {
+public class BaseRxRepository<TB, AB> implements IRxRepository<TB, AB>, IRepository<TB, AB> {
 
     private final IRepository repository;
     private final RxRepositoryHelper helper = new RxRepositoryHelper();
@@ -32,18 +32,18 @@ public class BaseRxRepository implements IRxRepository, IRepository {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage storage, IExpirePolicy policy, IProvider provider) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IProvider<TB, AB> provider) {
         return repository.get(key, storage, policy, provider);
     }
 
     @Override
-    public <T, A> int remove(IDataKey<T, A> key, IStorage storage, IRemovePolicy policy) {
+    public <T extends TB, A extends AB> int remove(IDataKey<T, A> key, IStorage<TB, AB> storage, IRemovePolicy<TB, AB> policy) {
         return repository.remove(key, storage, policy);
     }
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage storage, IExpirePolicy policy, IRxProvider provider) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IRxProvider<TB, AB> provider) {
         return helper.get(key, storage, policy, provider);
     }
-
+    
 }

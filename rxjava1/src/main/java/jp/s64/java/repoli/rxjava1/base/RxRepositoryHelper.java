@@ -14,10 +14,10 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/26.
  */
 
-public class RxRepositoryHelper implements IRxRepository {
+public class RxRepositoryHelper<TB, AB> implements IRxRepository<TB, AB> {
 
     @Override
-    public <T, A> Observable<IRepositoryDataContainer<T, A>> get(final IDataKey<T, A> key, final IRxStorage storage, final IExpirePolicy policy, final IRxProvider provider) {
+    public <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> get(final IDataKey<T, A> key, final IRxStorage<TB, AB> storage, final IExpirePolicy<TB, AB> policy, final IRxProvider<TB, AB> provider) {
         return storage.getAsync(key)
                 //.onErrorResumeNext(Observable.empty())
                 .map(new Func1<IRepositoryDataContainer<T, A>, ReturningRepositoryDataContainer<T, A>>() {

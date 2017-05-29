@@ -7,7 +7,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
-import jp.s64.java.repoli.realm.bin.BinaryStorageObject;
 import jp.s64.java.repoli.realm.core.IRealmStorage;
 import jp.s64.java.repoli.rxjava1.base.BaseRxStorage;
 import rx.Observable;
@@ -18,7 +17,7 @@ import rx.functions.Func1;
  * Created by shuma on 2017/05/27.
  */
 
-public abstract class RealmBinaryStorage extends BaseRxStorage implements IRealmStorage {
+public abstract class RealmBinaryStorage<TB, AB> extends BaseRxStorage<TB, AB> implements IRealmStorage<TB, AB> {
 
     @Override
     public Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(final String serializedKey) {

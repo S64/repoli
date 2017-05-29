@@ -29,7 +29,7 @@ public class TestObject extends RealmObject {
     }
 
     @SavingObjectClass(TestObjectSavingClass.class)
-    public static class Key implements IDataKey<TestObject, Void> {
+    public static class Key implements IDataKey<TestObject, TestObject> {
 
         @Override
         public TypeToken<TestObject> getBodyType() {
@@ -37,8 +37,8 @@ public class TestObject extends RealmObject {
         }
 
         @Override
-        public TypeToken<Void> getAttachmentType() {
-            return TypeToken.of(Void.class);
+        public TypeToken<TestObject> getAttachmentType() {
+            return TypeToken.of(TestObject.class);
         }
 
         @Override

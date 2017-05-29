@@ -12,9 +12,9 @@ import rx.functions.Action1;
  * Created by shuma on 2017/05/26.
  */
 
-public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
+public class SimpleRxOnMemoryStorage<TB, AB> extends BaseRxStorage<TB, AB> implements IStorage<TB, AB> {
 
-    private final SimpleOnMemoryStorage synchronous = new SimpleOnMemoryStorage();
+    private final SimpleOnMemoryStorage<TB, AB> synchronous = new SimpleOnMemoryStorage();
 
     @Override
     public Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(String serializedKey) {
@@ -44,7 +44,7 @@ public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
         return synchronous.get(key);
     }
 
@@ -59,7 +59,7 @@ public class SimpleRxOnMemoryStorage extends BaseRxStorage implements IStorage {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> save(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> save(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
         return synchronous.save(key, container);
     }
 

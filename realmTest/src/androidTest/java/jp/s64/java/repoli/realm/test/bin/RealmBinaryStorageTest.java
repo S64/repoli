@@ -96,7 +96,7 @@ public class RealmBinaryStorageTest {
 
     @Test
     public void test() {
-        RealmBinaryStorage storage = new RealmBinaryStorage() {
+        RealmBinaryStorage<String, String> storage = new RealmBinaryStorage<String, String>() {
 
             @Override
             public Realm getRealmInstance() {

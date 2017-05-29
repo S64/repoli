@@ -13,10 +13,10 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
  * Created by shuma on 2017/05/19.
  */
 
-public abstract class BaseRepository implements IRepository {
+public abstract class BaseRepository<TB, AB> implements IRepository<TB, AB> {
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage storage, IExpirePolicy policy, IProvider provider) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IProvider<TB, AB> provider) {
         ReturningRepositoryDataContainer<T, A> container;
         {
             container = new ReturningRepositoryDataContainer<>(storage.get(key));
@@ -47,7 +47,7 @@ public abstract class BaseRepository implements IRepository {
     }
 
     @Override
-    public <T, A> int remove(IDataKey<T, A> key, IStorage storage, IRemovePolicy policy) {
+    public <T extends TB, A extends AB> int remove(IDataKey<T, A> key, IStorage<TB, AB> storage, IRemovePolicy<TB, AB> policy) {
         int result = 0;
         ReturningRepositoryDataContainer<T, A> container;
         {

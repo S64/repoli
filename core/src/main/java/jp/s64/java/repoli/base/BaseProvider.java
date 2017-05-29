@@ -13,7 +13,7 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
  * Created by shuma on 2017/05/22.
  */
 
-public abstract class BaseProvider implements IProvider, ISerializerUser {
+public abstract class BaseProvider<TB, AB> implements IProvider<TB, AB>, ISerializerUser {
 
     private final ProviderHelper helper = new ProviderHelper();
 
@@ -43,7 +43,7 @@ public abstract class BaseProvider implements IProvider, ISerializerUser {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<byte[], byte[]> raw;
         {
             ProvidedContainer ret = requestBySerializedKey(key.getSerialized());

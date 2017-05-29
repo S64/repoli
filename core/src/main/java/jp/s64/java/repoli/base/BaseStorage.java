@@ -13,7 +13,7 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
  * Created by shuma on 2017/05/19.
  */
 
-public abstract class BaseStorage implements IStorage, ISerializerUser {
+public abstract class BaseStorage<TB, AB> implements IStorage<TB, AB>, ISerializerUser {
 
     private final StorageHelper helper = new StorageHelper();
 
@@ -43,8 +43,7 @@ public abstract class BaseStorage implements IStorage, ISerializerUser {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
-        ReturningRepositoryDataContainer<T, A> ret;
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
         IRepositoryDataContainer<byte[], byte[]> raw;
         {
             raw = new ReturningRepositoryDataContainer<>(getBySerializedKey(key.getSerialized()));
@@ -63,7 +62,7 @@ public abstract class BaseStorage implements IStorage, ISerializerUser {
     }
 
     @Override
-    public <T, A> IRepositoryDataContainer<T, A> save(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> save(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
         ReturningRepositoryDataContainer<T, A> container = new ReturningRepositoryDataContainer<>(original);
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());

@@ -9,8 +9,8 @@ import rx.Observable;
  * Created by shuma on 2017/05/26.
  */
 
-public interface IRxRepository {
+public interface IRxRepository<TB, AB> {
 
-    <T, A> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage storage, IExpirePolicy policy, IRxProvider provider);
+    <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> get(IDataKey<T, A> key, IRxStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IRxProvider<TB, AB> provider);
 
 }

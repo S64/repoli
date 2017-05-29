@@ -14,7 +14,7 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
  * Created by shuma on 2017/05/22.
  */
 
-public class SimpleOnMemoryStorage extends BaseStorage {
+public class SimpleOnMemoryStorage<TB, BA> extends BaseStorage<TB, BA> {
 
     private final Map<String, UUID> byKey = new HashMap<>();
     private final Map<String, Set<UUID>> byRelatedKey = new HashMap<>();
