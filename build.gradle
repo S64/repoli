@@ -32,7 +32,7 @@ allprojects {
         stetho_realm_version = '2.0.0'
         android_support_version = '25.3.1'
         orma_version = '3.2.2'
-        jetbrains_annotations_version = '15.0'
+        jetbrains_annotations_version = '13.0'
 
         android_compilesdk_version = 25
         android_buildtools_version = '25.0.2'
