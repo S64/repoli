@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.rxjava1.core;
 
+import org.jetbrains.annotations.NotNull;
+
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import rx.Observable;
@@ -10,6 +12,6 @@ import rx.Observable;
 
 public interface IRxProvider<TB, AB> {
 
-    <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> request(IDataKey<T, A> key);
+    @NotNull <T extends TB, A extends AB> Observable<IRepositoryDataContainer<T, A>> request(@NotNull IDataKey<T, A> key);
 
 }

@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.rxjava1.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import jp.s64.java.repoli.base.BaseRepository;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IExpirePolicy;
@@ -19,7 +21,9 @@ import rx.Observable;
 
 public class BaseRxRepository<TB, AB> implements IRxRepository<TB, AB>, IRepository<TB, AB> {
 
+    @NotNull
     private final IRepository repository;
+
     private final RxRepositoryHelper<TB, AB> helper = new RxRepositoryHelper<>();
 
     public BaseRxRepository() {
@@ -27,7 +31,7 @@ public class BaseRxRepository<TB, AB> implements IRxRepository<TB, AB>, IReposit
         };
     }
 
-    public BaseRxRepository(IRepository repository) {
+    public BaseRxRepository(@NotNull IRepository repository) {
         this.repository = repository;
     }
 

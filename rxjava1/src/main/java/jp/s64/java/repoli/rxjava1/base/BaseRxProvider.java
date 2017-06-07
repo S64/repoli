@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.rxjava1.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 import jp.s64.java.repoli.base.BaseProvider;
@@ -63,6 +65,7 @@ public abstract class BaseRxProvider implements IRxProvider<Object, Object>, ISe
                 });
     }
 
-    public abstract Observable<BaseProvider.ProvidedContainer> requestBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract Observable<BaseProvider.ProvidedContainer> requestBySerializedKey(@NotNull String serializedKey);
 
 }

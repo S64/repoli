@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.rxjava1.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 import jp.s64.java.repoli.base.StorageHelper;
@@ -82,12 +84,16 @@ public abstract class BaseRxStorage<TB, AB> implements IRxStorage<TB, AB>, ISeri
                 });
     }
 
-    public abstract Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract Observable<IRepositoryDataContainer<byte[], byte[]>> getBySerializedKey(@NotNull String serializedKey);
 
-    public abstract Observable<Integer> removeBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract Observable<Integer> removeBySerializedKey(@NotNull String serializedKey);
 
-    public abstract Observable<Integer> removeRelativesByRelatedKey(String relatedKey);
+    @NotNull
+    public abstract Observable<Integer> removeRelativesByRelatedKey(@NotNull String relatedKey);
 
-    public abstract Observable<Void> saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<byte[], byte[]> container);
+    @NotNull
+    public abstract Observable<Void> saveBySerializedKey(@NotNull String serializedKey, @NotNull String relatedKey, @NotNull IRepositoryDataContainer<byte[], byte[]> container);
 
 }
