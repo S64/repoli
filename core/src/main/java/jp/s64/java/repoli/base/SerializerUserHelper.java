@@ -3,6 +3,8 @@ package jp.s64.java.repoli.base;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,22 +39,22 @@ public class SerializerUserHelper implements ISerializerUser {
     }
 
     @Override
-    public void addSerializer(ISerializer serializer) {
+    public void addSerializer(@NotNull ISerializer serializer) {
         serializers.add(serializer);
     }
 
     @Override
-    public void addSerializer(Collection<ISerializer> serializers) {
+    public void addSerializer(@NotNull Collection<ISerializer> serializers) {
         this.serializers.addAll(serializers);
     }
 
     @Override
-    public void removeSerializer(ISerializer serializer) {
+    public void removeSerializer(@NotNull ISerializer serializer) {
         serializers.remove(serializer);
     }
 
     @Override
-    public void removeSerializer(Collection<ISerializer> serializers) {
+    public void removeSerializer(@NotNull Collection<ISerializer> serializers) {
         this.serializers.removeAll(serializers);
     }
 
@@ -61,11 +63,13 @@ public class SerializerUserHelper implements ISerializerUser {
         serializers.clear();
     }
 
+    @NotNull
     public SortedSet<ISerializer> getSerializers() {
         return serializers;
     }
 
-    public <T> T deserializeByClass(TypeToken<T> type, byte[] serialized) {
+    @NotNull
+    public <T> T deserializeByClass(@NotNull TypeToken<T> type, @NotNull byte[] serialized) {
         for (ISerializer serializer : serializers) {
             if (!serializer.canSerialize(type)) {
                 continue;
@@ -75,7 +79,8 @@ public class SerializerUserHelper implements ISerializerUser {
         throw SerializerNotFoundException.instantiate(serializers, type);
     }
 
-    public <T> byte[] serializeByClass(TypeToken<T> type, Object deserialized) {
+    @NotNull
+    public <T> byte[] serializeByClass(@NotNull TypeToken<T> type, @NotNull Object deserialized) {
         for (ISerializer serializer : serializers) {
             if (!serializer.canSerialize(type)) {
                 continue;
@@ -85,7 +90,8 @@ public class SerializerUserHelper implements ISerializerUser {
         throw SerializerNotFoundException.instantiate(serializers, type);
     }
 
-    public <T, A> ReturningRepositoryDataContainer<T, A> convertBytesToReturning(IDataKey<T, A> key, IRepositoryDataContainer<byte[], byte[]> bytes) {
+    @NotNull
+    public <T, A> ReturningRepositoryDataContainer<T, A> convertBytesToReturning(@NotNull IDataKey<T, A> key, @NotNull IRepositoryDataContainer<byte[], byte[]> bytes) {
         ReturningRepositoryDataContainer<T, A> ret = new ReturningRepositoryDataContainer<>();
         {
             ret.setBody(deserializeByClass(
@@ -104,7 +110,8 @@ public class SerializerUserHelper implements ISerializerUser {
         return ret;
     }
 
-    public <T, A> IRepositoryDataContainer<byte[], byte[]> convertContainerToBytes(IDataKey<T, A> key, IRepositoryDataContainer<T, A> container) {
+    @NotNull
+    public <T, A> IRepositoryDataContainer<byte[], byte[]> convertContainerToBytes(@NotNull IDataKey<T, A> key, @NotNull IRepositoryDataContainer<T, A> container) {
         ReturningRepositoryDataContainer<byte[], byte[]> ret = new ReturningRepositoryDataContainer<>();
         {
             byte[] bodyBytes = serializeByClass(
@@ -129,7 +136,8 @@ public class SerializerUserHelper implements ISerializerUser {
 
     public static class SerializerNotFoundException extends RuntimeException {
 
-        public static SerializerNotFoundException instantiate(Collection<ISerializer> serializers, TypeToken<?> type) {
+        @NotNull
+        public static SerializerNotFoundException instantiate(@NotNull Collection<ISerializer> serializers, @NotNull TypeToken<?> type) {
             List<String> names = new LinkedList<>();
             for (ISerializer serializer : serializers) {
                 names.add(serializer.getClass().getCanonicalName());
@@ -137,7 +145,7 @@ public class SerializerUserHelper implements ISerializerUser {
             return new SerializerNotFoundException(names, type);
         }
 
-        protected SerializerNotFoundException(Collection<String> serializerNames, TypeToken<?> type) {
+        protected SerializerNotFoundException(@NotNull Collection<String> serializerNames, @NotNull TypeToken<?> type) {
             super(String.format(
                     "Supported serializer is not found. Current registered serializers: %s. Required class is `%s`.",
                     serializerNames,

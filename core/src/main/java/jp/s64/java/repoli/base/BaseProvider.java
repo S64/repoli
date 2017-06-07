@@ -1,5 +1,8 @@
 package jp.s64.java.repoli.base;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 
 import jp.s64.java.repoli.core.IDataKey;
@@ -18,22 +21,22 @@ public abstract class BaseProvider<TB, AB> implements IProvider<TB, AB>, ISerial
     private final ProviderHelper helper = new ProviderHelper();
 
     @Override
-    public void addSerializer(ISerializer serializer) {
+    public void addSerializer(@NotNull ISerializer serializer) {
         helper.addSerializer(serializer);
     }
 
     @Override
-    public void removeSerializer(ISerializer serializer) {
+    public void removeSerializer(@NotNull ISerializer serializer) {
         helper.removeSerializer(serializer);
     }
 
     @Override
-    public void addSerializer(Collection<ISerializer> serializer) {
+    public void addSerializer(@NotNull Collection<ISerializer> serializer) {
         helper.addSerializer(serializer);
     }
 
     @Override
-    public void removeSerializer(Collection<ISerializer> serializer) {
+    public void removeSerializer(@NotNull Collection<ISerializer> serializer) {
         helper.removeSerializer(serializer);
     }
 
@@ -42,8 +45,9 @@ public abstract class BaseProvider<TB, AB> implements IProvider<TB, AB>, ISerial
         helper.clearSerializer();
     }
 
+    @NotNull
     @Override
-    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> request(IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> request(@NotNull IDataKey<T, A> key) {
         ReturningRepositoryDataContainer<byte[], byte[]> raw;
         {
             ProvidedContainer ret = requestBySerializedKey(key.getSerialized());
@@ -57,39 +61,48 @@ public abstract class BaseProvider<TB, AB> implements IProvider<TB, AB>, ISerial
         return helper.convertBytesToReturning(key, raw);
     }
 
-    public abstract ProvidedContainer requestBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract ProvidedContainer requestBySerializedKey(@NotNull String serializedKey);
 
     public static class ProvidedContainer {
 
+        @Nullable
         private byte[] body;
+
+        @Nullable
         private byte[] attachment;
+
+        @Nullable
         private Long requestedAtTimeMillis;
 
-        public ProvidedContainer(Long requestedAtTimeMillis) {
+        public ProvidedContainer(@Nullable Long requestedAtTimeMillis) {
             setRequestedAtTimeMillis(requestedAtTimeMillis);
         }
 
+        @Nullable
         public byte[] getBody() {
             return body;
         }
 
-        public void setBody(byte[] body) {
+        public void setBody(@Nullable byte[] body) {
             this.body = body;
         }
 
+        @Nullable
         public byte[] getAttachment() {
             return attachment;
         }
 
-        public void setAttachment(byte[] attachment) {
+        public void setAttachment(@Nullable byte[] attachment) {
             this.attachment = attachment;
         }
 
+        @Nullable
         public Long getRequestedAtTimeMillis() {
             return requestedAtTimeMillis;
         }
 
-        public void setRequestedAtTimeMillis(Long requestedAtTimeMillis) {
+        public void setRequestedAtTimeMillis(@Nullable Long requestedAtTimeMillis) {
             this.requestedAtTimeMillis = requestedAtTimeMillis;
         }
 

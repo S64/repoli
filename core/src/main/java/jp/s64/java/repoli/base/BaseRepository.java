@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IExpirePolicy;
 import jp.s64.java.repoli.core.IProvider;
@@ -15,8 +17,9 @@ import jp.s64.java.repoli.internal.ReturningRepositoryDataContainer;
 
 public abstract class BaseRepository<TB, AB> implements IRepository<TB, AB> {
 
+    @NotNull
     @Override
-    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IProvider<TB, AB> provider) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(@NotNull IDataKey<T, A> key, @NotNull IStorage<TB, AB> storage, @NotNull IExpirePolicy<TB, AB> policy, @NotNull IProvider<TB, AB> provider) {
         ReturningRepositoryDataContainer<T, A> container;
         {
             container = new ReturningRepositoryDataContainer<>(storage.get(key));
@@ -46,8 +49,9 @@ public abstract class BaseRepository<TB, AB> implements IRepository<TB, AB> {
         return container;
     }
 
+    @NotNull
     @Override
-    public <T extends TB, A extends AB> int remove(IDataKey<T, A> key, IStorage<TB, AB> storage, IRemovePolicy<TB, AB> policy) {
+    public <T extends TB, A extends AB> int remove(@NotNull IDataKey<T, A> key, @NotNull IStorage<TB, AB> storage, @NotNull IRemovePolicy<TB, AB> policy) {
         int result = 0;
         ReturningRepositoryDataContainer<T, A> container;
         {

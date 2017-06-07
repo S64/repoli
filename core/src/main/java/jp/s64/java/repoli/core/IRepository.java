@@ -1,13 +1,15 @@
 package jp.s64.java.repoli.core;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by shuma on 2017/05/19.
  */
 
 public interface IRepository<TB, AB> {
 
-    <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key, IStorage<TB, AB> storage, IExpirePolicy<TB, AB> policy, IProvider<TB, AB> provider);
+    @NotNull <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(@NotNull IDataKey<T, A> key, @NotNull IStorage<TB, AB> storage, @NotNull IExpirePolicy<TB, AB> policy, @NotNull IProvider<TB, AB> provider);
 
-    <T extends TB, A extends AB> int remove(IDataKey<T, A> key, IStorage<TB, AB> storage, IRemovePolicy<TB, AB> policy);
+    @NotNull <T extends TB, A extends AB> int remove(@NotNull IDataKey<T, A> key, @NotNull IStorage<TB, AB> storage, @NotNull IRemovePolicy<TB, AB> policy);
 
 }

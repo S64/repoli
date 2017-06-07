@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 import jp.s64.java.repoli.core.IDataKey;
@@ -18,22 +20,22 @@ public abstract class BaseStorage<TB, AB> implements IStorage<TB, AB>, ISerializ
     private final StorageHelper helper = new StorageHelper();
 
     @Override
-    public void addSerializer(ISerializer serializer) {
+    public void addSerializer(@NotNull ISerializer serializer) {
         helper.addSerializer(serializer);
     }
 
     @Override
-    public void removeSerializer(ISerializer serializer) {
+    public void removeSerializer(@NotNull ISerializer serializer) {
         helper.removeSerializer(serializer);
     }
 
     @Override
-    public void addSerializer(Collection<ISerializer> serializer) {
+    public void addSerializer(@NotNull Collection<ISerializer> serializer) {
         helper.addSerializer(serializer);
     }
 
     @Override
-    public void removeSerializer(Collection<ISerializer> serializer) {
+    public void removeSerializer(@NotNull Collection<ISerializer> serializer) {
         helper.removeSerializer(serializer);
     }
 
@@ -42,8 +44,9 @@ public abstract class BaseStorage<TB, AB> implements IStorage<TB, AB>, ISerializ
         helper.clearSerializer();
     }
 
+    @NotNull
     @Override
-    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(IDataKey<T, A> key) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> get(@NotNull IDataKey<T, A> key) {
         IRepositoryDataContainer<byte[], byte[]> raw;
         {
             raw = new ReturningRepositoryDataContainer<>(getBySerializedKey(key.getSerialized()));
@@ -51,18 +54,21 @@ public abstract class BaseStorage<TB, AB> implements IStorage<TB, AB>, ISerializ
         return helper.convertBytesToReturning(key, raw);
     }
 
+    @NotNull
     @Override
-    public int remove(IDataKey<?, ?> key) {
+    public int remove(@NotNull IDataKey<?, ?> key) {
         return removeBySerializedKey(key.getSerialized());
     }
 
+    @NotNull
     @Override
-    public int removeRelatives(IDataKey<?, ?> key) {
+    public int removeRelatives(@NotNull IDataKey<?, ?> key) {
         return removeRelativesByRelatedKey(key.getRelatedKey());
     }
 
+    @NotNull
     @Override
-    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> save(IDataKey<T, A> key, IRepositoryDataContainer<T, A> original) {
+    public <T extends TB, A extends AB> IRepositoryDataContainer<T, A> save(@NotNull IDataKey<T, A> key, @NotNull IRepositoryDataContainer<T, A> original) {
         ReturningRepositoryDataContainer<T, A> container = new ReturningRepositoryDataContainer<>(original);
         {
             container.setSavedAtTimeMillis(System.currentTimeMillis());
@@ -74,12 +80,16 @@ public abstract class BaseStorage<TB, AB> implements IStorage<TB, AB>, ISerializ
         return container;
     }
 
-    public abstract IRepositoryDataContainer<byte[], byte[]> getBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract IRepositoryDataContainer<byte[], byte[]> getBySerializedKey(@NotNull String serializedKey);
 
-    public abstract int removeBySerializedKey(String serializedKey);
+    @NotNull
+    public abstract int removeBySerializedKey(@NotNull String serializedKey);
 
-    public abstract int removeRelativesByRelatedKey(String relatedKey);
+    @NotNull
+    public abstract int removeRelativesByRelatedKey(@NotNull String relatedKey);
 
-    public abstract void saveBySerializedKey(String serializedKey, String relatedKey, IRepositoryDataContainer<byte[], byte[]> container);
+    @NotNull
+    public abstract void saveBySerializedKey(@NotNull String serializedKey, @NotNull String relatedKey, @NotNull IRepositoryDataContainer<byte[], byte[]> container);
 
 }

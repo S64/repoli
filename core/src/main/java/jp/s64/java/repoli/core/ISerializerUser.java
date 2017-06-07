@@ -1,5 +1,7 @@
 package jp.s64.java.repoli.core;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 /**
@@ -8,13 +10,13 @@ import java.util.Collection;
 
 public interface ISerializerUser {
 
-    void addSerializer(ISerializer serializer);
+    void addSerializer(@NotNull ISerializer serializer);
 
-    void addSerializer(Collection<ISerializer> serializer);
+    void addSerializer(@NotNull Collection<ISerializer> serializer);
 
-    void removeSerializer(ISerializer serializer);
+    void removeSerializer(@NotNull ISerializer serializer);
 
-    void removeSerializer(Collection<ISerializer> serializer);
+    void removeSerializer(@NotNull Collection<ISerializer> serializer);
 
     void clearSerializer();
 
