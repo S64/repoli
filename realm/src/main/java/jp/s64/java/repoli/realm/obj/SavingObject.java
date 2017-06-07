@@ -1,6 +1,11 @@
 package jp.s64.java.repoli.realm.obj;
 
+import android.support.annotation.NonNull;
+
 import com.google.common.collect.ImmutableList;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import io.realm.RealmModel;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
@@ -15,24 +20,28 @@ public interface SavingObject<T extends RealmModel, A extends RealmModel> extend
     String RELATED_FIELD_NAME = "relatedKey";
     ImmutableList<String> REQUIRED_FIELD_NAMES = ImmutableList.of(PRIMARY_FIELD_NAME, RELATED_FIELD_NAME);
 
+    @NotNull
+    @NonNull
     String getSerializedKey();
 
-    void setSerializedKey(String serializedKey);
+    void setSerializedKey(@NotNull @NonNull String serializedKey);
 
+    @NotNull
+    @NonNull
     String getRelatedKey();
 
-    void setRelatedKey(String relatedKey);
+    void setRelatedKey(@NotNull @NonNull String relatedKey);
 
-    void setBody(T body);
+    void setBody(@Nullable @android.support.annotation.Nullable T body);
 
-    void setAttachment(A attachment);
+    void setAttachment(@Nullable @android.support.annotation.Nullable A attachment);
 
-    void setSavedAtTimeMillis(Long savedAtTimeMillis);
+    void setSavedAtTimeMillis(@Nullable @android.support.annotation.Nullable Long savedAtTimeMillis);
 
-    void setRequestedAtTimeMillis(Long requestedAtTimeMillis);
+    void setRequestedAtTimeMillis(@Nullable @android.support.annotation.Nullable Long requestedAtTimeMillis);
 
-    void setRawBody(Object body);
+    void setRawBody(@Nullable @android.support.annotation.Nullable Object body);
 
-    void setRawAttachment(Object attachment);
+    void setRawAttachment(@Nullable @android.support.annotation.Nullable Object attachment);
 
 }

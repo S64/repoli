@@ -1,7 +1,11 @@
 package jp.s64.java.repoli.realm.obj;
 
+import android.support.annotation.NonNull;
+
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -255,7 +259,9 @@ public abstract class RealmObjectStorage<TB extends RealmModel, AB extends Realm
                 });
     }
 
-    public static Class<? extends SavingObject<?, ?>> getOrFailSavingClass(Class<?> clazz) {
+    @NotNull
+    @NonNull
+    public static Class<? extends SavingObject<?, ?>> getOrFailSavingClass(@NotNull @NonNull Class<?> clazz) {
         SavingObjectClass annotated = null;
 
         for (Annotation annotation : clazz.getDeclaredAnnotations()) {
@@ -300,7 +306,9 @@ public abstract class RealmObjectStorage<TB extends RealmModel, AB extends Realm
         return annotated.value();
     }
 
-    public static Class<? extends SavingObject<?, ?>> getOrFailSavingClass(IDataKey<?, ?> key) {
+    @NotNull
+    @NonNull
+    public static Class<? extends SavingObject<?, ?>> getOrFailSavingClass(@NotNull @NonNull IDataKey<?, ?> key) {
         try {
             return getOrFailSavingClass(key.getClass());
         } catch (RealmObjectStorageException e) {
@@ -311,7 +319,7 @@ public abstract class RealmObjectStorage<TB extends RealmModel, AB extends Realm
     }
 
     public static class RealmObjectStorageException extends RuntimeException {
-        public RealmObjectStorageException(Throwable throwable) {
+        public RealmObjectStorageException(@NotNull @NonNull Throwable throwable) {
             super(throwable);
         }
     }

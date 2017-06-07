@@ -1,5 +1,9 @@
 package jp.s64.java.repoli.realm.obj;
 
+import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,5 +16,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SavingObjectClass {
+
+    @NotNull
+    @NonNull
     Class<? extends SavingObject<?, ?>> value();
+
 }

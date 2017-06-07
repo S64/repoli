@@ -1,5 +1,10 @@
 package jp.s64.java.repoli.realm.bin;
 
+import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -13,16 +18,30 @@ import jp.s64.java.repoli.core.IRepositoryDataContainer;
 @KeepMember
 public class BinaryStorageObject extends RealmObject implements IRepositoryDataContainer<byte[], byte[]> {
 
+    @NotNull
+    @NonNull
     @PrimaryKey
     private String serializedKey;
 
+    @NotNull
+    @NonNull
     @Index
     private String relatedKey;
 
+    @Nullable
+    @android.support.annotation.Nullable
     private byte[] body;
+
+    @Nullable
+    @android.support.annotation.Nullable
     private byte[] attachment;
 
+    @Nullable
+    @android.support.annotation.Nullable
     private Long savedAtTimeMillis;
+
+    @Nullable
+    @android.support.annotation.Nullable
     private Long requestedAtTimeMillis;
 
     public String getSerializedKey() {
