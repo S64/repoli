@@ -119,10 +119,7 @@ public class ListSerializer implements ISerializer {
     }
 
     @Override
-    public int compareTo(ISerializer serializer) {
-        if (SerializableSerializer.class.isInstance(serializer)) {
-            return -1;
-        }
+    public float getPriority() {
         return 1;
     }
 

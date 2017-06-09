@@ -11,12 +11,16 @@ import java.util.Set;
  * Created by shuma on 2017/05/19.
  */
 
-public interface ISerializer extends Comparable<ISerializer> {
+public interface ISerializer {
 
-    @Nullable <T> T deserialize(@NotNull TypeToken<T> type, @Nullable byte[] serialized, @NotNull Set<ISerializer> serializers);
+    @Nullable
+    <T> T deserialize(@NotNull TypeToken<T> type, @Nullable byte[] serialized, @NotNull Set<ISerializer> serializers);
 
-    @Nullable <T> byte[] serialize(@NotNull TypeToken<T> type, @Nullable Object deserialized, @NotNull Set<ISerializer> serializers);
+    @Nullable
+    <T> byte[] serialize(@NotNull TypeToken<T> type, @Nullable Object deserialized, @NotNull Set<ISerializer> serializers);
 
     boolean canSerialize(@NotNull TypeToken<?> type);
+
+    float getPriority();
 
 }

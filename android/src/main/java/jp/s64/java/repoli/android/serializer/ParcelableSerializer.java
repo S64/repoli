@@ -8,7 +8,6 @@ import com.google.common.reflect.TypeToken;
 import java.util.Set;
 
 import jp.s64.java.repoli.core.ISerializer;
-import jp.s64.java.repoli.preset.serializer.SerializableSerializer;
 
 /**
  * Created by shuma on 2017/05/22.
@@ -64,11 +63,8 @@ public class ParcelableSerializer implements ISerializer {
     }
 
     @Override
-    public int compareTo(ISerializer serializer) {
-        if (SerializableSerializer.class.isInstance(serializer)) {
-            return -1;
-        }
-        return 1;
+    public float getPriority() {
+        return 4;
     }
 
     public static class ParcelableSerializerException extends RuntimeException {

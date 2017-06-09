@@ -38,8 +38,8 @@ public class VoidSerializer implements ISerializer {
     }
 
     @Override
-    public int compareTo(ISerializer serializer) {
-        return -1;
+    public float getPriority() {
+        return 0;
     }
 
 }
