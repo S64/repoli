@@ -5,6 +5,7 @@ import com.google.common.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -12,6 +13,8 @@ import java.util.Set;
  */
 
 public interface ISerializer {
+
+    Comparator<ISerializer> COMPARATOR = new SerializerComparator();
 
     @Nullable
     <T> T deserialize(@NotNull TypeToken<T> type, @Nullable byte[] serialized, @NotNull Set<ISerializer> serializers);
@@ -22,5 +25,14 @@ public interface ISerializer {
     boolean canSerialize(@NotNull TypeToken<?> type);
 
     float getPriority();
+
+    class SerializerComparator implements Comparator<ISerializer> {
+
+        @Override
+        public int compare(ISerializer o1, ISerializer o2) {
+            return Float.compare(o1.getPriority(), o2.getPriority());
+        }
+
+    }
 
 }

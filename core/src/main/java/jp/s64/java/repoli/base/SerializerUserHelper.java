@@ -27,7 +27,7 @@ import jp.s64.java.repoli.preset.serializer.VoidSerializer;
 
 public class SerializerUserHelper implements ISerializerUser {
 
-    private final SortedSet<ISerializer> serializers = new TreeSet<>();
+    private final SortedSet<ISerializer> serializers = new TreeSet<>(ISerializer.COMPARATOR);
 
     public SerializerUserHelper() {
         addSerializer(Lists.newArrayList(
