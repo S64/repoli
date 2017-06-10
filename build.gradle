@@ -35,7 +35,7 @@ allprojects {
         shared_labels = ['java', 'aar', 'android']
         default_configurations = ['archives']
         default_repo = 'maven'
-        default_licenses = ['MIT']
+        default_licenses = ['Apache-2.0']
 
         rxjava1_version = '1.3.0'
         junit_version = '4.12'
