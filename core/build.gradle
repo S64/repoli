@@ -1,4 +1,6 @@
 apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -6,4 +8,59 @@ dependencies {
     compile "com.google.guava:guava:${guava_version}"
     compile "org.jetbrains:annotations:${jetbrains_annotations_version}"
     testCompile "junit:junit:${junit_version}"
+}
+
+bintray {
+    user = bintray_user
+    key = bintray_api_key
+
+    configurations = default_configurations
+    publications = ['MyPublication']
+
+    pkg {
+        repo = default_repo
+        name = 'repoli-core'
+        licenses = default_licenses
+        websiteUrl = site_url
+        issueTrackerUrl = issues_url
+        vcsUrl = git_url
+        labels = shared_labels
+        publicDownloadNumbers = true
+
+        version {
+            name = repoli_version_name
+            released = toIsoDateFormat(new Date())
+            vcsTag = repoli_version_name
+        }
+    }
+
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            groupId artifact_group
+            artifactId 'repoli-core'
+            version repoli_version_name
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
