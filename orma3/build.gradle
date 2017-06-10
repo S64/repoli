@@ -29,7 +29,7 @@ dependencies {
     })
 
     testCompile "junit:junit:${junit_version}"
-    compile project(path: ':rxjava1')
+    compile "jp.s64.java.repoli:rxjava1:${repoli_version_name}"
 
     annotationProcessor "com.github.gfx.android.orma:orma-processor:${orma_version}"
     compile "com.github.gfx.android.orma:orma:${orma_version}"

@@ -32,6 +32,6 @@ dependencies {
     })
 
     testCompile "junit:junit:${junit_version}"
-    
-    compile project(path: ':rxjava1')
+
+    compile "jp.s64.java.repoli:rxjava1:${repoli_version_name}"
 }
