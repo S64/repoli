@@ -2,6 +2,9 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+group = artifact_group
+version = repoli_version_name
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -40,12 +43,11 @@ publishing {
     publications {
         MyPublication(MavenPublication) {
             from components.java
+
             artifact sourcesJar
             artifact javadocJar
 
-            groupId artifact_group
-            artifactId 'repoli-core'
-            version repoli_version_name
+            artifactId 'core'
         }
     }
 }
@@ -61,6 +63,5 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
-    archives sourcesJar
-    archives javadocJar
+    archives sourcesJar, javadocJar
 }
