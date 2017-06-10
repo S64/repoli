@@ -25,7 +25,7 @@ allprojects {
     }
 
     ext {
-        repoli_version_name = '0.0.1-SNAPSHOT'
+        repoli_version_name = '0.0.1'
         android_versioncode = 1
 
         artifact_group = 'jp.s64.java.repoli'
