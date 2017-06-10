@@ -32,7 +32,6 @@ dependencies {
     })
 
     testCompile "junit:junit:${junit_version}"
-
-    compile project(path: ':core')
+    
     compile project(path: ':rxjava1')
 }

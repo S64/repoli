@@ -30,5 +30,5 @@ dependencies {
 
     testCompile "junit:junit:${junit_version}"
 
-    compile project(':core')
+    compile "jp.s64.java.repoli:core:${repoli_version_name}"
 }
