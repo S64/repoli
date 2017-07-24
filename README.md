@@ -16,6 +16,8 @@ And, Below modules is now under development. (not published)
 - `orma3`
 - `rxjava2`
 
+Japanese details is available here: [blog.s64.jp](http://blog.s64.jp/entry/published-repoli-0_0_1)
+
 ## Usages
 
 Add following lines to your buildscripts.
