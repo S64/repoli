@@ -7,6 +7,7 @@ Repoli is supported some platforms. You can use below modules:
 
 - `core`
 - `rxjava1`
+- `rxjava2`
 - `realm`
 
 And, Below modules is now under development. (not published)
@@ -14,7 +15,6 @@ And, Below modules is now under development. (not published)
 - `android`
   - Currently you **can** use Repoli on Android without this module!
 - `orma3`
-- `rxjava2`
 
 Japanese details is available here: [blog.s64.jp](http://blog.s64.jp/entry/published-repoli-0_0_1)
 
@@ -25,7 +25,7 @@ Add following lines to your buildscripts.
 ```groovy
 buildscript {
     ext {
-        repoli_version = '0.0.1'
+        repoli_version = '0.0.2'
     }
 }
 ```
@@ -40,6 +40,7 @@ repositories {
 dependencies {
     compile "jp.s64.java.repoli:core:${repoli_version}"
     // compile "jp.s64.java.repoli:rxjava1:${repoli_version}"
+    // compile "jp.s64.java.repoli:rxjava2:${repoli_version}"
     // compile "jp.s64.java.repoli:realm:${repoli_version}"
 }
 ```
