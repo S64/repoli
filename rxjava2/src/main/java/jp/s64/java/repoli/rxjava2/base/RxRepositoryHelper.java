@@ -16,6 +16,8 @@
 
 package jp.s64.java.repoli.rxjava2.base;
 
+import com.google.common.base.Optional;
+
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
@@ -42,7 +44,7 @@ public class RxRepositoryHelper<TB, AB> implements IRxRepository<TB, AB> {
                 .flatMap(new Function<ReturningRepositoryDataContainer<T, A>, SingleSource<? extends ReturningRepositoryDataContainer<T, A>>>() {
                     @Override
                     public SingleSource<? extends ReturningRepositoryDataContainer<T, A>> apply(final ReturningRepositoryDataContainer<T, A> container) throws Exception {
-                        Single<Integer> obs;
+                        Single<Optional<Integer>> obs;
                         if (policy.shouldExpire(key, container)) {
                             {
                                 container.setBody(null);
@@ -50,14 +52,19 @@ public class RxRepositoryHelper<TB, AB> implements IRxRepository<TB, AB> {
                                 container.setSavedAtTimeMillis(null);
                                 container.setRequestedAtTimeMillis(null);
                             }
-                            obs = storage.removeAsync(key);
+                            obs = storage.removeAsync(key).map(new Function<Integer, Optional<Integer>>() {
+                                @Override
+                                public Optional<Integer> apply(Integer integer) throws Exception {
+                                    return Optional.of(integer);
+                                }
+                            });
                         } else {
-                            obs = Single.just(null);
+                            obs = Single.just(Optional.<Integer>absent());
                         }
                         return obs
-                                .map(new Function<Integer, ReturningRepositoryDataContainer<T, A>>() {
+                                .map(new Function<Optional<Integer>, ReturningRepositoryDataContainer<T, A>>() {
                                     @Override
-                                    public ReturningRepositoryDataContainer<T, A> apply(Integer removed) throws Exception {
+                                    public ReturningRepositoryDataContainer<T, A> apply(Optional<Integer> removed) throws Exception {
                                         return container;
                                     }
                                 });
@@ -66,16 +73,21 @@ public class RxRepositoryHelper<TB, AB> implements IRxRepository<TB, AB> {
                 .flatMap(new Function<ReturningRepositoryDataContainer<T, A>, Single<ReturningRepositoryDataContainer<T, A>>>() {
                     @Override
                     public Single<ReturningRepositoryDataContainer<T, A>> apply(final ReturningRepositoryDataContainer<T, A> container) {
-                        Single<Integer> obs;
+                        Single<Optional<Integer>> obs;
                         if (policy.shouldExpireWithRelatives(key, container)) {
-                            obs = storage.removeRelativesAsync(key);
+                            obs = storage.removeRelativesAsync(key).map(new Function<Integer, Optional<Integer>>() {
+                                @Override
+                                public Optional<Integer> apply(Integer integer) throws Exception {
+                                    return Optional.of(integer);
+                                }
+                            });
                         } else {
-                            obs = Single.just(null);
+                            obs = Single.just(Optional.<Integer>absent());
                         }
                         return obs
-                                .map(new Function<Integer, ReturningRepositoryDataContainer<T, A>>() {
+                                .map(new Function<Optional<Integer>, ReturningRepositoryDataContainer<T, A>>() {
                                     @Override
-                                    public ReturningRepositoryDataContainer<T, A> apply(Integer removed) {
+                                    public ReturningRepositoryDataContainer<T, A> apply(Optional<Integer> removed) {
                                         return container;
                                     }
                                 });
