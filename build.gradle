@@ -28,8 +28,8 @@ allprojects {
     }
 
     ext {
-        repoli_version_name = '0.0.1'
-        android_versioncode = 1
+        repoli_version_name = '0.0.2'
+        android_versioncode = 2
 
         artifact_group = 'jp.s64.java.repoli'
         site_url = 'https://github.com/S64/repoli'
