@@ -16,8 +16,9 @@
 
 package jp.s64.java.repoli.rxjava2.preset;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Action;
 import jp.s64.java.repoli.core.IDataKey;
 import jp.s64.java.repoli.core.IRepositoryDataContainer;
 import jp.s64.java.repoli.core.IStorage;
@@ -44,17 +45,13 @@ public class SimpleRxOnMemoryStorage<TB, AB> extends BaseRxStorage<TB, AB> imple
     }
 
     @Override
-    public Single<Void> saveBySerializedKey(final String serializedKey, final String relatedKey, final IRepositoryDataContainer<byte[], byte[]> container) {
-        return Single
-                .<Void>just(null)
-                .doOnSuccess(new Consumer<Void>() {
-
-                    @Override
-                    public void accept(Void aVoid) throws Exception {
-                        synchronous.saveBySerializedKey(serializedKey, relatedKey, container);
-                    }
-
-                });
+    public Completable saveBySerializedKey(final String serializedKey, final String relatedKey, final IRepositoryDataContainer<byte[], byte[]> container) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                synchronous.saveBySerializedKey(serializedKey, relatedKey, container);
+            }
+        });
     }
 
     @Override

@@ -19,7 +19,9 @@ package jp.s64.java.repoli.rxjava2.base;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import jp.s64.java.repoli.base.StorageHelper;
@@ -88,9 +90,9 @@ public abstract class BaseRxStorage<TB, AB> implements IRxStorage<TB, AB>, ISeri
         }
         IRepositoryDataContainer<byte[], byte[]> save = helper.convertContainerToBytes(key, container);
         return saveBySerializedKey(key.getSerialized(), key.getRelatedKey(), save)
-                .map(new Function<Void, IRepositoryDataContainer<T, A>>() {
+                .toSingle(new Callable<IRepositoryDataContainer<T, A>>() {
                     @Override
-                    public IRepositoryDataContainer<T, A> apply(Void aVoid) throws Exception {
+                    public IRepositoryDataContainer<T, A> call() throws Exception {
                         return container;
                     }
                 });
@@ -106,6 +108,6 @@ public abstract class BaseRxStorage<TB, AB> implements IRxStorage<TB, AB>, ISeri
     public abstract Single<Integer> removeRelativesByRelatedKey(@NotNull String relatedKey);
 
     @NotNull
-    public abstract Single<Void> saveBySerializedKey(@NotNull String serializedKey, @NotNull String relatedKey, @NotNull IRepositoryDataContainer<byte[], byte[]> container);
+    public abstract Completable saveBySerializedKey(@NotNull String serializedKey, @NotNull String relatedKey, @NotNull IRepositoryDataContainer<byte[], byte[]> container);
 
 }
